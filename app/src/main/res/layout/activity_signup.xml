@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="#F5F5F5"
+    android:background="@drawable/signup_bg"
     android:gravity="center"
     tools:context=".SignupActivity">
 
@@ -131,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:text="Sign Up"
-        android:backgroundTint="#1E88E5"
+        android:backgroundTint="#009688"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:layout_marginTop="20dp"
