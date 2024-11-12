@@ -1,4 +1,4 @@
 package com.example.ecoscout;
 
-public class PollutionHotspot {
+public class Alert {
 }
