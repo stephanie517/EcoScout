@@ -22,10 +22,8 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="112dp"
+        android:layout_height="82dp"
         android:src="@drawable/logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Up"
+        android:fontFamily="@font/poppins_semibold"
         android:textColor="@android:color/white"
         android:backgroundTint="@color/dark_green"
         app:layout_constraintTop_toTopOf="parent"
@@ -43,13 +42,14 @@
         android:layout_marginEnd="16dp" />
 
     <TextView
-        android:id="@+id/ecoScoutText1"
-        android:layout_width="212dp"
-        android:layout_height="49dp"
+        android:id="@+id/ecoScoutText"
+        android:layout_width="186dp"
+        android:layout_height="122dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="200dp"
-        android:gravity="center"
-        android:text="Clean Communities"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="start"
+        android:text="@string/eco_scout_text"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -58,42 +58,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.398" />
+        app:layout_constraintVertical_bias="0.454" />
 
-    <TextView
-        android:id="@+id/ecoScoutText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="200dp"
-        android:gravity="center"
-        android:text="One Photo at a Time"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.473" />
-
-    <TextView
-        android:id="@+id/ecoScoutText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="200dp"
-        android:gravity="center"
-        android:text="– Join EcoScout in the Fight Against Litter!"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.542"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.583" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
