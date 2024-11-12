@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Take a Photo Section -->
+    <Button
+        android:id="@+id/btnTakePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Take a Photo" />
+
+    <!-- Display Image After Capture -->
+    <ImageView
+        android:id="@+id/imgCapturedPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="Captured Image"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <!-- Image Analysis Result -->
+    <TextView
+        android:id="@+id/tvImageAnalysisResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Analysis Result: "
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <!-- Manual Input for Litter Type -->
+    <TextView
+        android:id="@+id/tvManualInputLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="If not recognized, categorize manually:"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/etManualLitterType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Litter Type"
+        android:visibility="gone" />
+
+    <!-- Location Tagging -->
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location: Not Tagged"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <!-- Submit Button -->
+    <Button
+        android:id="@+id/btnSubmitReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit Report"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"/>
+
+</LinearLayout>

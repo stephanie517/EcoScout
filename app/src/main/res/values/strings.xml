@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">EcoScout</string>
+    <string name="select_category">Select Category</string>
+    <string name="take_photo">Take a Photo</string>
+    <string name="submit_report">Submit Report</string>
+    <string name="photo_capture_error">Failed to capture image</string>
+    <string name="photo_prompt">Please capture a photo of the litter</string>
+    <string name="category_prompt">Please select a litter category</string>
+    <string name="report_success">Report submitted successfully</string>
+    <string name="location_not_available">Location not available</string>
+    <string name="location_permission_denied">Location permission denied</string>
+    <string name="location_retrieval_failed">Failed to retrieve location</string>
+
+    <string-array name="litter_categories">
+        <item>Select Category</item>
+        <item>Plastics</item>
+        <item>Paper</item>
+        <item>Organic Waste</item>
+        <item>Metals</item>
+        <item>Glass</item>
+    </string-array>
 </resources>
