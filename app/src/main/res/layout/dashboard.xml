@@ -6,13 +6,23 @@
     android:padding="16dp"
     android:gravity="center">
 
+    <!-- Button for Litter Reporting & Image Recognition -->
     <Button
-        android:id="@+id/joinCleanupButton"
+        android:id="@+id/litterReportingAndImageRecognitionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Join Cleanup"
+        android:text="Litter Reporting and Image Recognition"
         android:layout_marginBottom="16dp" />
 
+    <!-- Button for Cleanup Event Coordination -->
+    <Button
+        android:id="@+id/cleanupEventCoordinationButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cleanup Event Coordination"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Button for Alert -->
     <Button
         android:id="@+id/alertButton"
         android:layout_width="match_parent"
@@ -20,20 +30,31 @@
         android:text="Alert"
         android:layout_marginBottom="16dp" />
 
+    <!-- Button for Proper Disposal Guidance -->
     <Button
-        android:id="@+id/litterReportingButton"
+        android:id="@+id/properDisposalGuidanceButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Litter Reporting"
+        android:text="Proper Disposal Guidance"
         android:layout_marginBottom="16dp" />
 
+    <!-- Button for Rewards & Gamification -->
     <Button
         android:id="@+id/rewardsButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Rewards"
+        android:text="Rewards and Gamification"
         android:layout_marginBottom="16dp" />
 
+    <!-- Button for Sustainability Education -->
+    <Button
+        android:id="@+id/sustainabilityEducationButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sustainability Education"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Button for Sign Out -->
     <Button
         android:id="@+id/signOutButton"
         android:layout_width="match_parent"
