@@ -34,7 +34,7 @@ public class SignupActivity extends AppCompatActivity {
                 Toast.makeText(SignupActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             } else {
                 // Proceed directly to dashboard for now
-                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                Intent intent = new Intent(SignupActivity.this, Dashboard.class);
                 startActivity(intent);
                 finish();
             }
