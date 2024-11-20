@@ -30,6 +30,10 @@
         <activity
             android:name=".Dashboard"
             android:exported="true" />
+        <activity
+            android:name=".CleanupEvent"
+            android:exported="true" />
+
 
     </application>
 
