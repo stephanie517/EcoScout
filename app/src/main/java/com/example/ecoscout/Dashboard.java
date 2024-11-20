@@ -9,7 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Dashboard extends AppCompatActivity {
 
-    private Button joinCleanupButton, alertButton, litterReportingButton, rewardsButton, signOutButton;
+    private Button litterReportingAndImageRecognitionButton, cleanupEventCoordinationButton, alertButton,
+            properDisposalGuidanceButton, rewardsButton, sustainabilityEducationButton, signOutButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,20 +18,33 @@ public class Dashboard extends AppCompatActivity {
         setContentView(R.layout.dashboard);
 
         // Initialize the buttons
-        joinCleanupButton = findViewById(R.id.joinCleanupButton);
+        litterReportingAndImageRecognitionButton = findViewById(R.id.litterReportingAndImageRecognitionButton);
+        cleanupEventCoordinationButton = findViewById(R.id.cleanupEventCoordinationButton);
         alertButton = findViewById(R.id.alertButton);
-        litterReportingButton = findViewById(R.id.litterReportingButton);
+        properDisposalGuidanceButton = findViewById(R.id.properDisposalGuidanceButton);
         rewardsButton = findViewById(R.id.rewardsButton);
+        sustainabilityEducationButton = findViewById(R.id.sustainabilityEducationButton);
         signOutButton = findViewById(R.id.signOutButton);
 
         // Set onClickListeners for each button
-        joinCleanupButton.setOnClickListener(new View.OnClickListener() {
+
+        litterReportingAndImageRecognitionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Join Cleanup" button click
-                Toast.makeText(Dashboard.this, "Joining Cleanup", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to a new activity for joining cleanup events
-                // startActivity(new Intent(MainActivity.this, JoinCleanupActivity.class));
+                // Handle the "Litter Reporting & Image Recognition" button click
+                Toast.makeText(Dashboard.this, "Litter Reporting & Image Recognition", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the litter reporting and image recognition activity
+                // startActivity(new Intent(Dashboard.this, LitterReportingActivity.class));
+            }
+        });
+
+        cleanupEventCoordinationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the "Cleanup Event Coordination" button click
+                Toast.makeText(Dashboard.this, "Cleanup Event Coordination", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the cleanup event coordination activity
+                // startActivity(new Intent(Dashboard.this, CleanupEventCoordinationActivity.class));
             }
         });
 
@@ -40,27 +54,37 @@ public class Dashboard extends AppCompatActivity {
                 // Handle the "Alert" button click
                 Toast.makeText(Dashboard.this, "Alert", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to an alert screen
-                // startActivity(new Intent(MainActivity.this, AlertActivity.class));
+                // startActivity(new Intent(Dashboard.this, AlertActivity.class));
             }
         });
 
-        litterReportingButton.setOnClickListener(new View.OnClickListener() {
+        properDisposalGuidanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Litter Reporting" button click
-                Toast.makeText(Dashboard.this, "Litter Reporting", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to the litter reporting activity
-                // startActivity(new Intent(MainActivity.this, LitterReportingActivity.class));
+                // Handle the "Proper Disposal Guidance" button click
+                Toast.makeText(Dashboard.this, "Proper Disposal Guidance", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to a proper disposal guidance activity
+                // startActivity(new Intent(Dashboard.this, ProperDisposalActivity.class));
             }
         });
 
         rewardsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Rewards" button click
-                Toast.makeText(Dashboard.this, "Rewards", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to a rewards screen
-                // startActivity(new Intent(MainActivity.this, RewardsActivity.class));
+                // Handle the "Rewards & Gamification" button click
+                Toast.makeText(Dashboard.this, "Rewards & Gamification", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the rewards and gamification activity
+                // startActivity(new Intent(Dashboard.this, RewardsActivity.class));
+            }
+        });
+
+        sustainabilityEducationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the "Sustainability Education" button click
+                Toast.makeText(Dashboard.this, "Sustainability Education", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the sustainability education activity
+                // startActivity(new Intent(Dashboard.this, SustainabilityEducationActivity.class));
             }
         });
 
@@ -70,8 +94,8 @@ public class Dashboard extends AppCompatActivity {
                 // Handle the "Sign Out" button click
                 Toast.makeText(Dashboard.this, "Signing Out", Toast.LENGTH_SHORT).show();
                 // Example: Sign out logic, and navigate to login screen
-                // startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                // finish(); // Close the current activity (MainActivity)
+                // startActivity(new Intent(Dashboard.this, LoginActivity.class));
+                // finish(); // Close the current activity (Dashboard)
             }
         });
     }
