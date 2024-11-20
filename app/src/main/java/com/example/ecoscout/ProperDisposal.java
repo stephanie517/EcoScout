@@ -16,12 +16,12 @@ public class ProperDisposal extends AppCompatActivity {
         setContentView(R.layout.activity_proper);
 
         // Initializing the TextViews and ImageViews
-        wasteDisposalGuide = findViewById(R.id.wasteDisposalGuide);
-        wasteSorting = findViewById(R.id.wasteSorting);
-        localDisposalCenters = findViewById(R.id.localDisposalCenters);
+        wasteDisposalGuide = findViewById(R.id.wasteDisposalTitle);
+        wasteSorting = findViewById(R.id.wasteSortingIcon);
+        localDisposalCenters = findViewById(R.id.localDisposalDetails);
         wasteDisposalIcon = findViewById(R.id.wasteDisposalIcon);
         wasteSortingIcon = findViewById(R.id.wasteSortingIcon);
-        localCentersIcon = findViewById(R.id.localCentersIcon);
+        localCentersIcon = findViewById(R.id.localDisposalIcon);
 
         // Setting the content
         wasteDisposalGuide.setText("Waste Disposal Guide:\n" +
