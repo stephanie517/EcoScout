@@ -3,99 +3,86 @@ package com.example.ecoscout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 public class Dashboard extends AppCompatActivity {
 
-    private Button litterReportingAndImageRecognitionButton, cleanupEventCoordinationButton, alertButton,
-            properDisposalGuidanceButton, rewardsButton, sustainabilityEducationButton, signOutButton;
+    private CardView cardGeneral, cardLitterReport, cardMap, cardCleanUp, cardLeaderboard, cardResources;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dashboard);
 
-        // Initialize the buttons
-        litterReportingAndImageRecognitionButton = findViewById(R.id.litterReportingAndImageRecognitionButton);
-        cleanupEventCoordinationButton = findViewById(R.id.cleanupEventCoordinationButton);
-        alertButton = findViewById(R.id.alertButton);
-        properDisposalGuidanceButton = findViewById(R.id.properDisposalGuidanceButton);
-        rewardsButton = findViewById(R.id.rewardsButton);
-        sustainabilityEducationButton = findViewById(R.id.sustainabilityEducationButton);
-        signOutButton = findViewById(R.id.signOutButton);
+        // Initialize the CardViews
+        cardGeneral = findViewById(R.id.cardGeneral);
+        cardLitterReport = findViewById(R.id.cardLitterReport);
+        cardMap = findViewById(R.id.cardMap);
+        cardCleanUp = findViewById(R.id.cardCleanUp);
+        cardLeaderboard = findViewById(R.id.cardLeaderboard);
+        cardResources = findViewById(R.id.cardResources);
 
-        // Set onClickListeners for each button
+        // Set onClickListeners for each CardView
 
-        litterReportingAndImageRecognitionButton.setOnClickListener(new View.OnClickListener() {
+        cardGeneral.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Litter Reporting & Image Recognition" button click
-                Toast.makeText(Dashboard.this, "Litter Reporting & Image Recognition", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to the litter reporting and image recognition activity
-                // startActivity(new Intent(Dashboard.this, LitterReportingActivity.class));
+                // Handle the "General" card click
+                Toast.makeText(Dashboard.this, "General Information", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the general information activity
+                // startActivity(new Intent(Dashboard.this, GeneralActivity.class));
             }
         });
 
-        cleanupEventCoordinationButton.setOnClickListener(new View.OnClickListener() {
+        cardLitterReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Cleanup Event Coordination" button click
+                // Handle the "Litter Report" card click
+                Toast.makeText(Dashboard.this, "Litter Reporting", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the litter reporting activity
+                startActivity(new Intent(Dashboard.this, LitterReporting.class));
+            }
+        });
+
+        cardMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the "View Map" card click
+                Toast.makeText(Dashboard.this, "View Map", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the map activity
+                // startActivity(new Intent(Dashboard.this, MapActivity.class));
+            }
+        });
+
+        cardCleanUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the "Cleanup Event Coordination" card click
                 Toast.makeText(Dashboard.this, "Cleanup Event Coordination", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the cleanup event coordination activity
-                // startActivity(new Intent(Dashboard.this, CleanupEventCoordinationActivity.class));
+                startActivity(new Intent(Dashboard.this, CleanupEvent.class));
             }
         });
 
-        alertButton.setOnClickListener(new View.OnClickListener() {
+        cardLeaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Alert" button click
-                Toast.makeText(Dashboard.this, "Alert", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to an alert screen
-                // startActivity(new Intent(Dashboard.this, AlertActivity.class));
+                // Handle the "Leaderboard" card click
+                Toast.makeText(Dashboard.this, "Leaderboard", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the leaderboard activity
+                // startActivity(new Intent(Dashboard.this, LeaderboardActivity.class));
             }
         });
 
-        properDisposalGuidanceButton.setOnClickListener(new View.OnClickListener() {
+        cardResources.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Proper Disposal Guidance" button click
-                Toast.makeText(Dashboard.this, "Proper Disposal Guidance", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to a proper disposal guidance activity
-                // startActivity(new Intent(Dashboard.this, ProperDisposalActivity.class));
-            }
-        });
-
-        rewardsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle the "Rewards & Gamification" button click
-                Toast.makeText(Dashboard.this, "Rewards & Gamification", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to the rewards and gamification activity
-                // startActivity(new Intent(Dashboard.this, RewardsActivity.class));
-            }
-        });
-
-        sustainabilityEducationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle the "Sustainability Education" button click
-                Toast.makeText(Dashboard.this, "Sustainability Education", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to the sustainability education activity
-                // startActivity(new Intent(Dashboard.this, SustainabilityEducationActivity.class));
-            }
-        });
-
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle the "Sign Out" button click
-                Toast.makeText(Dashboard.this, "Signing Out", Toast.LENGTH_SHORT).show();
-                // Example: Sign out logic, and navigate to login screen
-                // startActivity(new Intent(Dashboard.this, LoginActivity.class));
-                // finish(); // Close the current activity (Dashboard)
+                // Handle the "Resources" card click
+                Toast.makeText(Dashboard.this, "Resources", Toast.LENGTH_SHORT).show();
+                // Example: Navigate to the resources activity
+                startActivity(new Intent(Dashboard.this, ProperDisposal.class));
             }
         });
     }
