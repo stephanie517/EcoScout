@@ -3,14 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/litter_bg"> <!-- Set your background image here -->
 
     <!-- Take a Photo Section -->
     <Button
         android:id="@+id/btnTakePhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Take a Photo" />
+        android:text="Take a Photo"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Upload Photo Section -->
+    <Button
+        android:id="@+id/btnUploadPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload a Photo"
+        android:layout_marginBottom="8dp"/>
 
     <!-- Display Image After Capture -->
     <ImageView
@@ -48,6 +58,12 @@
         android:visibility="gone" />
 
     <!-- Location Tagging -->
+    <Button
+        android:id="@+id/btnSelectLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Location"
+        android:layout_marginTop="16dp"/>
     <TextView
         android:id="@+id/tvLocation"
         android:layout_width="match_parent"
