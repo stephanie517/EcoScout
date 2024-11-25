@@ -2,19 +2,23 @@ package com.example.ecoscout;
 
 import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast; // Import Toast
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.activity.result.contract.ActivityResultContracts;
-import android.provider.MediaStore;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class LitterReporting extends AppCompatActivity {
 
-    private Button btnTakePhoto, btnSubmitReport;
+    private Button btnTakePhoto, btnUploadPhoto, btnSubmitReport, btnSelectLocation;
     private ImageView imgCapturedPhoto;
     private TextView tvImageAnalysisResult, tvLocation, tvManualInputLabel;
     private EditText etManualLitterType;
@@ -27,7 +31,9 @@ public class LitterReporting extends AppCompatActivity {
         setContentView(R.layout.activity_litter);
 
         btnTakePhoto = findViewById(R.id.btnTakePhoto);
+        btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
         btnSubmitReport = findViewById(R.id.btnSubmitReport);
+        btnSelectLocation = findViewById(R.id.btnSelectLocation); // Ensure this button exists in your layout
         imgCapturedPhoto = findViewById(R.id.imgCapturedPhoto);
         tvImageAnalysisResult = findViewById(R.id.tvImageAnalysisResult);
         tvLocation = findViewById(R.id.tvLocation);
@@ -42,11 +48,25 @@ public class LitterReporting extends AppCompatActivity {
             }
         });
 
+        // Upload Photo Button Click
+        btnUploadPhoto.setOnClickListener(v -> {
+            Intent uploadPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            uploadPhotoIntent.setType("image/*");
+            startActivityForResult(uploadPhotoIntent, 2);
+        });
+
+        // Select Location Button Click
+        btnSelectLocation.setOnClickListener(v -> {
+            Intent mapIntent = new Intent(LitterReporting.this, MapActivity.class);
+            startActivityForResult(mapIntent, 3);
+        });
+
         // Submit Report Button Click
         btnSubmitReport.setOnClickListener(v -> {
             if (litterLocation != null && !litterType.isEmpty()) {
-                // Submit report to the server or database
                 submitLitterReport(litterLocation, litterType);
+            } else {
+                Toast.makeText(this, "Please select a location and litter type.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -56,53 +76,57 @@ public class LitterReporting extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            // Get the image from the intent
-            imgCapturedPhoto.setImageURI(data.getData());
+            Uri imageUri = data.getData(); // Get the URI from the Intent
+            imgCapturedPhoto.setImageURI(imageUri);
             imgCapturedPhoto.setVisibility(View.VISIBLE);
-
-            // Simulate Image Analysis
             analyzeImage(data);
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            imgCapturedPhoto.setImageURI(selectedImageUri);
+            imgCapturedPhoto.setVisibility(View.VISIBLE);
+            analyzeImage(data);
+        } else if (requestCode == 3 && resultCode == RESULT_OK) {
+            LatLng location = data.getParcelableExtra("location");
+            if (location != null) {
+                litterLocation = new Location("manual");
+                litterLocation.setLatitude(location.latitude);
+                litterLocation.setLongitude(location.longitude);
+                tvLocation.setText("Location: Lat: " + litterLocation.getLatitude() + ", Lon: " + litterLocation.getLongitude());
+                tvLocation.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     // Simulate image recognition analysis
     private void analyzeImage(Intent data) {
-        // This is where you'd integrate your real image recognition code.
-        // For now, we assume the recognition works and classifies the litter as 'Plastic'.
-        String recognizedLitterType = "Plastic"; // This is a simulated result.
+        String recognizedLitterType = "Plastic"; // Simulated result
         tvImageAnalysisResult.setText("Analysis Result: " + recognizedLitterType);
         tvImageAnalysisResult.setVisibility(View.VISIBLE);
-
-        // Enable manual input in case of failure in recognition
         tvManualInputLabel.setVisibility(View.VISIBLE);
         etManualLitterType.setVisibility(View.VISIBLE);
         litterType = recognizedLitterType;
     }
 
-    // Handle location tagging (this can be done with location services)
-    private void tagLocation() {
-        // This is a simple simulation of location tagging.
-        litterLocation = new Location("dummyProvider");
-        litterLocation.setLatitude(14.5995); // Example latitude
-        litterLocation.setLongitude(120.9842); // Example longitude
-
-        // Display the location
-        tvLocation.setText("Location: Lat: " + litterLocation.getLatitude() + ", Lon: " + litterLocation.getLongitude());
-        tvLocation.setVisibility(View.VISIBLE);
-    }
-
     // Submit the litter report
-    private void submitLitterReport(Location location, String litterType) {
-        // You would send the report to your backend or Firebase here.
-        // For now, we just simulate the submission.
+    private void submitLitterReport(Location location, String litterType)
+    {
         String report = "Litter Type: " + litterType + "\nLocation: " + location.getLatitude() + ", " + location.getLongitude();
-        // Log or process the report
+        Log.d("LitterReport", report);
+        Toast.makeText(this, "Report submitted successfully!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        // Automatically tag location when activity starts
-        tagLocation();
+        tagLocation(); // Optional: Automatically tag the user's current location
+    }
+
+    // Optional: Automatically tag the user's current location
+    private void tagLocation() {
+        litterLocation = new Location("dummyProvider");
+        litterLocation.setLatitude(14.5995);
+        litterLocation.setLongitude(120.9842);
+        tvLocation.setText("Location: Lat: " + litterLocation.getLatitude() + ", Lon: " + litterLocation.getLongitude());
+        tvLocation.setVisibility(View.VISIBLE);
     }
 }
