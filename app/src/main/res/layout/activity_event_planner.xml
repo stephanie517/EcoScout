@@ -1,8 +1,8 @@
-<!-- activity_event_planner.xml -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@color/lightBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,12 +10,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Header Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Plan Your Event"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"
+            android:textColor="@color/primaryTextColor"/>
+
         <!-- Event Name -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Event Name"
             android:textSize="16sp"
+            android:textColor="@color/secondaryTextColor"
             android:layout_marginBottom="8dp"/>
 
         <EditText
@@ -23,7 +35,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter event name"
-            android:inputType="text" />
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp" />
 
         <!-- Event Date -->
         <TextView
@@ -31,6 +45,7 @@
             android:layout_height="wrap_content"
             android:text="Date"
             android:textSize="16sp"
+            android:textColor="@color/secondaryTextColor"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
@@ -39,7 +54,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter date (e.g., 2024-12-25)"
-            android:inputType="date" />
+            android:inputType="date"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp" />
 
         <!-- Event Time -->
         <TextView
@@ -47,6 +64,7 @@
             android:layout_height="wrap_content"
             android:text="Time"
             android:textSize="16sp"
+            android:textColor="@color/secondaryTextColor"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
@@ -55,7 +73,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter time (e.g., 14:00)"
-            android:inputType="time" />
+            android:inputType="time"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp" />
 
         <!-- Event Location -->
         <TextView
@@ -63,6 +83,7 @@
             android:layout_height="wrap_content"
             android:text="Location"
             android:textSize="16sp"
+            android:textColor="@color/secondaryTextColor"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"/>
 
@@ -71,7 +92,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter location"
-            android:inputType="text" />
+            android:inputType="text"
+            android:background="@drawable/rounded_edittext"
+            android:padding="12dp" />
 
         <!-- Submit Button -->
         <Button
@@ -79,6 +102,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Create Event"
-            android:layout_marginTop="24dp" />
+            android:backgroundTint="@color/buttonColor"
+            android:textColor="@color/buttonTextColor"
+            android:layout_marginTop="24dp"
+            android:padding="12dp"
+            android:textSize="18sp" />
     </LinearLayout>
 </ScrollView>

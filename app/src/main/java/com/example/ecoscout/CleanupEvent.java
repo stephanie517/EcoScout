@@ -1,4 +1,3 @@
-// EventPlannerActivity.java
 package com.example.ecoscout;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -66,18 +65,18 @@ public class CleanupEvent extends AppCompatActivity {
 
         // Save event to Firebase
         //if (eventId != null) {
-            //databaseReference.child(eventId).setValue(event)
-                    //.addOnSuccessListener(aVoid -> {
-                        //Toast.makeText(EventPlannerActivity.this, "Event created successfully", Toast.LENGTH_SHORT).show();
-                        // Clear input fields after successful creation
-                        //eventNameEditText.setText("");
-                        //eventDateEditText.setText("");
-                        //eventTimeEditText.setText("");
-                        //eventLocationEditText.setText("");
-                    //})
-                    //.addOnFailureListener(e -> {
-                        //Toast.makeText(EventPlannerActivity.this, "Failed to create event", Toast.LENGTH_SHORT).show();
-                    //});
-        }
+        //databaseReference.child(eventId).setValue(event)
+        //.addOnSuccessListener(aVoid -> {
+        //Toast.makeText(EventPlannerActivity.this, "Event created successfully", Toast.LENGTH_SHORT).show();
+        // Clear input fields after successful creation
+        //eventNameEditText.setText("");
+        //eventDateEditText.setText("");
+        //eventTimeEditText.setText("");
+        //eventLocationEditText.setText("");
+        //})
+        //.addOnFailureListener(e -> {
+        //Toast.makeText(EventPlannerActivity.this, "Failed to create event", Toast.LENGTH_SHORT).show();
+        //});
     }
+}
 //}
