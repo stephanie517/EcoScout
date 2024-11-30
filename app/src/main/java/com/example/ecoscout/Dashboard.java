@@ -62,7 +62,7 @@ public class Dashboard extends AppCompatActivity {
                 // Handle the "Cleanup Event Coordination" card click
                 Toast.makeText(Dashboard.this, "Cleanup Event Coordination", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the cleanup event coordination activity
-                startActivity(new Intent(Dashboard.this, CleanupEvent.class));
+                startActivity(new Intent(Dashboard.this, Event.class));
             }
         });
 

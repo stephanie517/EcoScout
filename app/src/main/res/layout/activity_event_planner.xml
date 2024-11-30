@@ -1,111 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/lightBackground"
-    android:orientation="vertical">
+    android:background="#F5F7FA">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:padding="24dp">
 
-        <!-- Header Section -->
+        <!-- Header Section with Modern Typography -->
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Plan Your Event"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="24dp"
-            android:textColor="@color/primaryTextColor"/>
-
-        <!-- Event Name -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Name"
-            android:textSize="16sp"
-            android:textColor="@color/secondaryTextColor"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/eventNameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter event name"
-            android:inputType="text"
-            android:background="@drawable/rounded_edittext"
-            android:padding="12dp" />
-
-        <!-- Event Date -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date"
-            android:textSize="16sp"
-            android:textColor="@color/secondaryTextColor"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/eventDateEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter date (e.g., 2024-12-25)"
-            android:inputType="date"
-            android:background="@drawable/rounded_edittext"
-            android:padding="12dp" />
-
-        <!-- Event Time -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Time"
-            android:textSize="16sp"
-            android:textColor="@color/secondaryTextColor"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/eventTimeEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter time (e.g., 14:00)"
-            android:inputType="time"
-            android:background="@drawable/rounded_edittext"
-            android:padding="12dp" />
-
-        <!-- Event Location -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Location"
-            android:textSize="16sp"
-            android:textColor="@color/secondaryTextColor"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/eventLocationEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter location"
-            android:inputType="text"
-            android:background="@drawable/rounded_edittext"
-            android:padding="12dp" />
-
-        <!-- Submit Button -->
-        <Button
-            android:id="@+id/submitEventButton"
-            android:layout_width="match_parent"
+            android:id="@+id/headerText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Create Event"
-            android:backgroundTint="@color/buttonColor"
-            android:textColor="@color/buttonTextColor"
-            android:layout_marginTop="24dp"
-            android:padding="12dp"
-            android:textSize="18sp" />
-    </LinearLayout>
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="#283593"
+            android:letterSpacing="0.02"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Event Name Input with Material Design Styling -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/eventNameLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/headerText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/eventNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Event Name"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Date and Time in a Horizontal Layout -->
+        <LinearLayout
+            android:id="@+id/dateTimeLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/eventNameLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventDateLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventDateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Date"
+                    android:inputType="date"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/eventTimeLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eventTimeEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Time"
+                    android:inputType="time"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Location Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/eventLocationLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:layout_constraintTop_toBottomOf="@id/dateTimeLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/eventLocationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Location"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Modern Elevated Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submitEventButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Create Event"
+            android:textSize="16sp"
+            android:padding="16dp"
+            android:layout_marginTop="32dp"
+            app:cornerRadius="12dp"
+            app:layout_constraintTop_toBottomOf="@id/eventLocationLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
