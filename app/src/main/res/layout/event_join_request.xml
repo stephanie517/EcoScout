@@ -56,9 +56,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date: "
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_marginBottom="8dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:layout_gravity="start" />
 
         <!-- Event Location -->
         <TextView
@@ -66,9 +67,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Location: "
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_marginBottom="8dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:layout_gravity="start" />
 
         <!-- Event Description -->
         <TextView
@@ -76,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Details: "
+            android:fontFamily="@font/lato_black"
             android:textSize="16sp"
             android:layout_marginBottom="16dp"
             android:textColor="@android:color/black" />
@@ -105,7 +108,8 @@
             android:id="@+id/confirmJoinButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Yes, Join Now"
+            android:text="Confirm"
+            android:textSize="18sp"
             android:layout_marginBottom="10dp"
             android:textColor="@android:color/white" />
 
@@ -115,6 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Cancel"
+            android:textSize="18sp"
             android:textColor="@android:color/white" />
 
     </LinearLayout>

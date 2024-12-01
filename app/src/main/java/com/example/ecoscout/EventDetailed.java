@@ -33,12 +33,15 @@ public class EventDetailed extends AppCompatActivity {
 
         binding.joinNowButton.setOnClickListener(v -> {
             Intent joinIntent = new Intent(EventDetailed.this, EventJoinRequest.class);
+
             joinIntent.putExtra("name", binding.detailName.getText().toString());
             joinIntent.putExtra("date", binding.detailDate.getText().toString());
-            joinIntent.putExtra("location", R.string.bwcLocation); // Pass the resource ID
-            joinIntent.putExtra("desc", R.string.bwcDesc); // Pass the resource ID
-            joinIntent.putExtra("image", R.drawable.bwc); // Pass the image ID
+            joinIntent.putExtra("location", intent.getIntExtra("location", R.string.bwcLocation));
+            joinIntent.putExtra("desc", intent.getIntExtra("desc", R.string.bwcDesc));
+            joinIntent.putExtra("image", intent.getIntExtra("image", R.drawable.bwc));
+
             startActivity(joinIntent);
         });
+
     }
 }
