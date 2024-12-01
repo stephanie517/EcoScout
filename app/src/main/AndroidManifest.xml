@@ -47,6 +47,9 @@
             android:name=".EventDetailed"
             android:exported="true" />
         <activity
+            android:name=".EventJoinRequest"
+            android:exported="true" />
+        <activity
             android:name=".Alert"
             android:exported="true" />
         <activity
