@@ -56,6 +56,9 @@
             android:name=".ProperDisposal"
             android:exported="true" />
         <activity
+            android:name=".TutorialsActivity"
+            android:exported="true" />
+        <activity
             android:name=".RewardsGamification"
             android:exported="true" />
         <activity
