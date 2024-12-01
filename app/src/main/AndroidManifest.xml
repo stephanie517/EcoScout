@@ -67,6 +67,9 @@
         <activity
             android:name=".Sustainability"
             android:exported="true" />
+        <activity
+            android:name=".Leaderboard"
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"

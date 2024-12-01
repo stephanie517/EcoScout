@@ -72,7 +72,7 @@ public class Dashboard extends AppCompatActivity {
                 // Handle the "Leaderboard" card click
                 Toast.makeText(Dashboard.this, "Leaderboard", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the leaderboard activity
-                // startActivity(new Intent(Dashboard.this, LeaderboardActivity.class));
+                startActivity(new Intent(Dashboard.this, Leaderboard.class));
             }
         });
 
