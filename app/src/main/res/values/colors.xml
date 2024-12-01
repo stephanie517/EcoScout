@@ -14,6 +14,7 @@
     <color name="background_color_50">#B3FFFFFF</color>
     <color name="text_color_header">#323232</color>
     <color name="text_color_description">#616161</color>
+    <color name="lavender">#8692f7</color>
 
     <!-- Clean Up Event -->
     <color name="lightBackground">#F9F9F9</color>

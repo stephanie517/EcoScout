@@ -1,4 +1,60 @@
 <resources>
     <string name="app_name">EcoScout</string>
     <string name="eco_scout_text">Clean Communities\nOne Photo at a Time\n– Join EcoScout in the Fight Against Litter!</string>
+
+    //bwc (Barangay-Wide Cleanup)
+    <string name="bwcLocation">Golden Country Homes
+\nBatangas City
+\nSouth Luzon</string>
+    <string name="bwcDesc">A barangay-led initiative to clean up streets, drainage systems, and public spaces.
+\nVolunteers will also conduct door-to-door education on waste segregation and recycling.</string>
+
+    //ccd (Coastal Cleanup Drive)
+    <string name="ccdLocation">White Beach
+\nBoracay
+\nAklan</string>
+    <string name="ccdDesc">Join us in preserving the pristine beauty of Boracay!
+\nVolunteers will help clean the coastline and underwater areas.
+\nScuba divers and snorkelers are welcome.
+\nSnacks and certificates will be provided.</string>
+
+    //mmrc (Metro Manila River Cleanup)
+    <string name="mmrcLocation">Pasig River
+\nMetro Manila
+\nPhilippines</string>
+    <string name="mmrcDesc">A large-scale effort to clean up the iconic Pasig River.
+\nVolunteers will work on removing plastic waste and other debris from riverbanks.
+\nIncludes an environmental talk by local eco-warriors.</string>
+
+    //mtc (Mountain Trails Cleanup)
+    <string name="mtcLocation">Mt. Pulag
+\nBenguet
+\nCordillera Region</string>
+    <string name="mtcDesc">Help maintain the beauty of Mt. Pulag\'s trails!
+\nThis cleanup targets the camping and hiking routes.
+\nParticipants will also receive a guided hike and eco-tour as part of the event.</string>
+
+    //upc (Urban Park Cleanup)
+    <string name="upcLocation">Quezon Memorial Circle
+\nQuezon City
+\nMetro Manila</string>
+    <string name="upcDesc">A community event focused on cleaning up litter in the park.
+\nFollowed by a tree-planting activity.
+\nPerfect for families and student organizations.</string>
+
+    //mrc (Mangrove Reforestation and Cleanup)
+    <string name="mrcLocation">Banacon Island
+\nBohol
+\nCentral Visayas</string>
+    <string name="mrcDesc">Volunteers will help clean up the mangrove areas.
+\nPlant mangrove saplings to protect the coastline from erosion.
+\nProvide habitat for marine life.</string>
+
+    //bcm (Beach Cleanup Marathon)
+    <string name="bcmLocation">Cloud 9 Beach
+\nSiargao
+\nSurigao del Norte</string>
+    <string name="bcmDesc">A day-long beach cleanup event focused on the surfing areas of Siargao.
+\nSurf lessons will be offered at a discount for volunteers after the cleanup.</string>
+
 </resources>

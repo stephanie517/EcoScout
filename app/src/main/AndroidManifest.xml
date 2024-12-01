@@ -23,7 +23,6 @@
             </intent-filter>
         </activity>
 
-        <!-- SignupActivity Declaration -->
         <activity
             android:name=".SignupActivity"
             android:exported="true" />
@@ -45,7 +44,10 @@
             android:name=".MapActivity"
             android:exported="true" />
         <activity
-            android:name=".CleanupEvent"
+            android:name=".Event"
+            android:exported="true" />
+        <activity
+            android:name=".EventDetailed"
             android:exported="true" />
         <activity
             android:name=".Alert"
