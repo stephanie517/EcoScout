@@ -62,12 +62,6 @@
             android:name=".TutorialsActivity"
             android:exported="true" />
         <activity
-            android:name=".RewardsGamification"
-            android:exported="true" />
-        <activity
-            android:name=".Sustainability"
-            android:exported="true" />
-        <activity
             android:name=".Leaderboard"
             android:exported="true" />
 
