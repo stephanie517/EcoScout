@@ -17,18 +17,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Proper Waste Disposal and Sorting"
-            android:textSize="26sp"
+            android:textSize="28sp"
             android:textColor="#1A73E8"
             android:textStyle="bold"
             android:gravity="center"
-            android:paddingBottom="20dp" />
+            android:paddingBottom="24dp" />
 
         <!-- Waste Disposal Guide Section -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardElevation="6dp"
+            android:layout_marginBottom="20dp"
+            app:cardElevation="8dp"
             app:cardBackgroundColor="#FFFFFF"
             app:cornerRadius="12dp">
 
@@ -36,60 +36,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <ImageView
                     android:id="@+id/wasteDisposalIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_waste_disposal" />
+                    android:src="@drawable/ic_waste_disposal"
+                    android:contentDescription="Waste Disposal Icon" />
 
                 <TextView
                     android:id="@+id/wasteDisposalTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Waste Disposal Guide"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textColor="#333333"
                     android:textStyle="bold"
-                    android:paddingTop="10dp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:paddingTop="12dp" />
 
                 <TextView
                     android:id="@+id/wasteDisposalDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Proper waste disposal is crucial to maintaining a clean environment. The following guide explains how to properly dispose of common types of waste:"
                     android:textSize="16sp"
                     android:textColor="#555555"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="10dp" />
-
-                <!-- Bullet Points -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• *Recyclables*: Paper, glass, metal, and plastic should be separated and sent to recycling centers."
-                    android:textSize="16sp"
-                    android:textColor="#555555"
-                    android:paddingBottom="4dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• *Compostables*: Organic waste like food scraps and yard trimmings can be composted to enrich soil."
-                    android:textSize="16sp"
-                    android:textColor="#555555"
-                    android:paddingBottom="4dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• *E-waste*: Old electronics should be disposed of at certified e-waste recycling facilities."
-                    android:textSize="16sp"
-                    android:textColor="#555555"
-                    android:paddingBottom="10dp" />
+                    android:paddingTop="12dp"
+                    android:lineSpacingExtra="6dp"
+                    android:text="Proper waste disposal is vital for maintaining a healthy and sustainable environment. It helps reduce pollution, conserve resources, and promote public health. The guide below explains how to responsibly dispose of various types of waste:\n\nRecyclables: Items like paper, plastic, glass, and metals should be sorted and sent to recycling facilities. Always clean them before recycling to avoid contamination.\n\nCompostables: Organic waste such as food scraps, coffee grounds, and garden waste can be composted to create nutrient-rich soil.\n\nHazardous Waste: Batteries, electronic devices, chemicals, and paints must be handled with care and disposed of at certified hazardous waste facilities." />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -98,8 +74,8 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardElevation="6dp"
+            android:layout_marginBottom="20dp"
+            app:cardElevation="8dp"
             app:cardBackgroundColor="#FFFFFF"
             app:cornerRadius="12dp">
 
@@ -107,62 +83,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <ImageView
                     android:id="@+id/wasteSortingIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_waste_sorting" />
+                    android:src="@drawable/ic_waste_sorting"
+                    android:contentDescription="Waste Sorting Icon" />
 
                 <TextView
                     android:id="@+id/wasteSortingTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Waste Sorting Tutorial"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textColor="#333333"
                     android:textStyle="bold"
-                    android:paddingTop="10dp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:paddingTop="12dp" />
 
                 <TextView
                     android:id="@+id/wasteSortingDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Sorting waste correctly is essential for recycling and composting efforts. The following interactive guides will teach you how to properly sort your waste:"
                     android:textSize="16sp"
                     android:textColor="#555555"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="10dp" />
+                    android:paddingTop="12dp"
+                    android:lineSpacingExtra="6dp"
+                    android:text="Correctly sorting waste ensures recyclables and compostables are processed effectively. Key steps include:\n\nRecyclables: Separate plastics, paper, and glass. Check for recycling codes to know if specific items are recyclable.\n\nCompostables: Use a separate bin for food scraps and other biodegradable items. Avoid mixing compostables with non-degradable waste.\n\nInteractive Guides: The app offers video tutorials to help you sort waste correctly, including advanced techniques for handling e-waste and mixed materials." />
 
-                <!-- Bullet Points -->
-                <TextView
-                    android:layout_width="match_parent"
+                <Button
+                    android:id="@+id/tutorialButton"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="• Interactive video tutorials on sorting recyclables, compostables, and general waste."
-                    android:textSize="16sp"
-                    android:textColor="#555555"
-                    android:paddingBottom="4dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Step-by-step guide on separating plastics, metals, paper, and compostable materials."
-                    android:textSize="16sp"
-                    android:textColor="#555555"
-                    android:paddingBottom="10dp" />
-
-                <!-- Video Placeholder -->
-                <ImageView
-                    android:id="@+id/wasteSortingVideo"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/waste_sorting_video_placeholder"
-                    android:scaleType="centerCrop"
-                    android:paddingBottom="15dp" />
+                    android:layout_marginTop="16dp"
+                    android:padding="12dp"
+                    android:backgroundTint="#1A73E8"
+                    android:text="View Tutorials"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -171,7 +134,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="6dp"
+            app:cardElevation="8dp"
             app:cardBackgroundColor="#FFFFFF"
             app:cornerRadius="12dp">
 
@@ -179,52 +142,36 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <ImageView
                     android:id="@+id/localDisposalIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_local_disposal" />
+                    android:src="@drawable/ic_local_disposal"
+                    android:contentDescription="Local Disposal Icon" />
 
                 <TextView
                     android:id="@+id/localDisposalTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Local Disposal Centers"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     android:textColor="#333333"
                     android:textStyle="bold"
-                    android:paddingTop="10dp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:paddingTop="12dp" />
 
                 <TextView
                     android:id="@+id/localDisposalDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Find your nearest recycling and waste management center. The app provides information on local facilities based on your region:"
                     android:textSize="16sp"
                     android:textColor="#555555"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="10dp" />
-
-                <!-- Bullet Points -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Locate nearby recycling centers for paper, plastic, and e-waste."
-                    android:textSize="16sp"
-                    android:textColor="#555555"
-                    android:paddingBottom="4dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Find composting stations for organic waste and yard trimmings."
-                    android:textSize="16sp"
-                    android:textColor="#555555"
-                    android:paddingBottom="10dp" />
+                    android:paddingTop="12dp"
+                    android:lineSpacingExtra="6dp"
+                    android:text="Finding nearby waste management centers is essential for responsible disposal. Our app helps you locate the nearest certified facilities for various types of waste:\n\nRecycling Centers: Drop off items like plastics, paper, and e-waste at centers equipped for proper recycling.\n\nComposting Stations: Many communities have facilities that accept food and yard waste for composting.\n\nHazardous Waste Facilities: Locate drop-off points for electronics, batteries, and other toxic materials. Check for scheduled collection events in your area." />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
