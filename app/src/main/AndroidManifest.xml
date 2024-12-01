@@ -27,6 +27,9 @@
             android:name=".SignupActivity"
             android:exported="true" />
         <activity
+            android:name=".LoginPage"
+            android:exported="true" />
+        <activity
             android:name=".Dashboard"
             android:exported="true" />
         <activity
@@ -54,6 +57,9 @@
             android:exported="true" />
         <activity
             android:name=".ProperDisposal"
+            android:exported="true" />
+        <activity
+            android:name=".TutorialsActivity"
             android:exported="true" />
         <activity
             android:name=".RewardsGamification"
