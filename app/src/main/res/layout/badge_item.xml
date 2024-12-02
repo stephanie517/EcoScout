@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:gravity="center"
+    android:layout_margin="4dp"
+    android:background="#FFFFFF"
+    android:elevation="4dp"
+    tools:context=".BadgeAdapter">
+
+    <ImageView
+        android:id="@+id/badgeIcon"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/badge_community_leader"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/badgeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:text="Badge Name"/>
+
+    <TextView
+        android:id="@+id/badgePoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_gravity="center"
+        android:text="Points Required"/>
+
+    <TextView
+        android:id="@+id/badgeStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:text="Status"/>
+</LinearLayout>
