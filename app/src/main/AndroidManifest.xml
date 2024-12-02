@@ -16,9 +16,11 @@
         android:theme="@style/Theme.EcoScout"
         tools:targetApi="31">
         <activity
-            android:name=".ReportListActivity"
+            android:name=".ViewMapActivity"
             android:exported="false" />
-        <!-- MainActivity Declaration -->
+        <activity
+            android:name=".ReportListActivity"
+            android:exported="false" /> <!-- MainActivity Declaration -->
         <activity
             android:name=".MainActivity"
             android:exported="true">

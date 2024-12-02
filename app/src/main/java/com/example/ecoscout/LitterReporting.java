@@ -29,7 +29,7 @@ public class LitterReporting extends AppCompatActivity {
     private ImageView btnUploadPhoto;
     private Button btnSubmitReport, btnSelectLocation;
     private ImageView imgCapturedPhoto;
-    private TextView tvImageAnalysisResult, tvLocation, tvManualInputLabel;
+    private TextView tvLocation, tvManualInputLabel;
     private EditText etManualLitterType;
     private String litterType = "";
     private Location litterLocation;
@@ -39,19 +39,17 @@ public class LitterReporting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_litter);
 
+        // Initializing UI elements
         btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
         btnSubmitReport = findViewById(R.id.btnSubmitReport);
         btnSelectLocation = findViewById(R.id.btnSelectLocation);
         imgCapturedPhoto = findViewById(R.id.imgCapturedPhoto);
-        tvImageAnalysisResult = findViewById(R.id.tvImageAnalysisResult);
         tvLocation = findViewById(R.id.tvLocation);
         tvManualInputLabel = findViewById(R.id.tvManualInputLabel);
         etManualLitterType = findViewById(R.id.etManualLitterType);
 
         // Upload Photo ImageView Click
-        btnUploadPhoto.setOnClickListener(v -> {
-            showUploadOptions();
-        });
+        btnUploadPhoto.setOnClickListener(v -> showUploadOptions());
 
         // Select Location Button Click
         btnSelectLocation.setOnClickListener(v -> {
@@ -61,6 +59,7 @@ public class LitterReporting extends AppCompatActivity {
 
         // Submit Report Button Click
         btnSubmitReport.setOnClickListener(v -> {
+            litterType = etManualLitterType.getText().toString().trim();
             if (litterLocation != null && !litterType.isEmpty()) {
                 submitLitterReport(litterLocation, litterType);
             } else {
@@ -69,6 +68,7 @@ public class LitterReporting extends AppCompatActivity {
         });
     }
 
+    // Show the BottomSheetDialog for photo upload options
     private void showUploadOptions() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_upload, null);
@@ -77,6 +77,7 @@ public class LitterReporting extends AppCompatActivity {
         Button btnTakePhoto = bottomSheetView.findViewById(R.id.btnTakePhoto);
         Button btnUploadFromGallery = bottomSheetView.findViewById(R.id.btnUploadFromGallery);
 
+        // Take Photo Button Click
         btnTakePhoto.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -85,6 +86,7 @@ public class LitterReporting extends AppCompatActivity {
             bottomSheetDialog.dismiss();
         });
 
+        // Upload from Gallery Button Click
         btnUploadFromGallery.setOnClickListener(v -> {
             Intent uploadPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
             uploadPhotoIntent.setType("image/*");
@@ -95,6 +97,7 @@ public class LitterReporting extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
+    // Handling the result of photo capture or gallery selection
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -102,41 +105,27 @@ public class LitterReporting extends AppCompatActivity {
             Uri imageUri = data.getData();
             imgCapturedPhoto.setImageURI(imageUri);
             imgCapturedPhoto.setVisibility(View.VISIBLE);
-            analyzeImage(data);
         } else if (requestCode == 2 && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
             imgCapturedPhoto.setImageURI(selectedImageUri);
             imgCapturedPhoto.setVisibility(View.VISIBLE);
-            analyzeImage(data);
         } else if (requestCode == 3 && resultCode == RESULT_OK) {
+            // Handling location selection from MapActivity
             LatLng location = data.getParcelableExtra("location");
             if (location != null) {
                 litterLocation = new Location("manual");
                 litterLocation.setLatitude(location.latitude);
                 litterLocation.setLongitude(location.longitude);
 
-                // Get the address from latitude and longitude
+                // Get the address from latitude and longitude using Geocoder
                 Geocoder geocoder = new Geocoder(this, Locale.getDefault());
                 try {
                     List<Address> addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
                     String locationText;
-                    if (addresses != null && addresses.size() > 0) {Address address = addresses.get(0);
-                        // Create a more readable address string
-                        locationText = "";
-                        if (address.getThoroughfare() != null) {
-                            locationText += address.getThoroughfare() + ", ";
-                        }
-                        if (address.getLocality() != null) {
-                            locationText += address.getLocality() + ", ";
-                        }
-                        if (address.getAdminArea() != null) {
-                            locationText += address.getAdminArea() + ", ";
-                        }
-                        if (address.getCountryName() != null) {
-                            locationText += address.getCountryName();
-                        }
+                    if (addresses != null && addresses.size() > 0) {
+                        Address address = addresses.get(0);
+                        locationText = formatAddress(address);
                     } else {
-                        // Fallback to coordinates if no address found
                         locationText = String.format("Location: %.4f, %.4f", location.latitude, location.longitude);
                     }
 
@@ -144,7 +133,6 @@ public class LitterReporting extends AppCompatActivity {
                     tvLocation.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    // Fallback to coordinates if geocoding fails
                     tvLocation.setText(String.format("Location: %.4f, %.4f", location.latitude, location.longitude));
                     tvLocation.setVisibility(View.VISIBLE);
                 }
@@ -152,18 +140,28 @@ public class LitterReporting extends AppCompatActivity {
         }
     }
 
-    private void analyzeImage(Intent data) {
-        String recognizedLitterType = "Plastic"; // Simulated result
-        tvImageAnalysisResult.setText("Analysis Result: " + recognizedLitterType);
-        tvImageAnalysisResult.setVisibility(View.VISIBLE);
-        tvManualInputLabel.setVisibility(View.VISIBLE);
-        etManualLitterType.setVisibility(View.VISIBLE);
-        litterType = recognizedLitterType;
+    // Formatting the address to display a readable location
+    private String formatAddress(Address address) {
+        StringBuilder locationText = new StringBuilder();
+        if (address.getThoroughfare() != null) {
+            locationText.append(address.getThoroughfare()).append(", ");
+        }
+        if (address.getLocality() != null) {
+            locationText.append(address.getLocality()).append(", ");
+        }
+        if (address.getAdminArea() != null) {
+            locationText.append(address.getAdminArea()).append(", ");
+        }
+        if (address.getCountryName() != null) {
+            locationText.append(address.getCountryName());
+        }
+        return locationText.toString();
     }
 
+    // Submit the litter report
     private void submitLitterReport(Location location, String litterType) {
         String report = "Litter Type: " + litterType + "\nLocation: " + location.getLatitude() + ", " + location.getLongitude();
-        Log.d(" LitterReport", report);
+        Log.d("LitterReport", report);
         Toast.makeText(this, "Report submitted successfully!", Toast.LENGTH_SHORT).show();
 
         // Navigate to the ReportListActivity
@@ -171,39 +169,31 @@ public class LitterReporting extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Automatically tag the user's current location on start (can be customized)
     @Override
     protected void onStart() {
         super.onStart();
-        tagLocation(); // Optional: Automatically tag the user's current location
+        tagLocation();
     }
 
     private void tagLocation() {
         litterLocation = new Location("dummyProvider");
-        litterLocation.setLatitude(14.5995);
+        litterLocation.setLatitude(14.5995); // Sample coordinates (Manila)
         litterLocation.setLongitude(120.9842);
 
-        // Use Geocoder to get a readable location name
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(14.5995, 120.9842, 1);
             if (addresses != null && addresses.size() > 0) {
                 Address address = addresses.get(0);
-                String locationText = "";
-                if (address.getLocality() != null) {
-                    locationText += address.getLocality() + ", ";
-                }
-                if (address.getAdminArea() != null) {
-                    locationText += address.getAdminArea();
-                }
+                String locationText = formatAddress(address);
                 tvLocation.setText(locationText);
             } else {
-                // Fallback to coordinates if no address found
                 tvLocation.setText(String.format("Location: %.4f, %.4f", litterLocation.getLatitude(), litterLocation.getLongitude()));
             }
             tvLocation.setVisibility(View.VISIBLE);
         } catch (IOException e) {
             e.printStackTrace();
-            // Fallback to coordinates if geocoding fails
             tvLocation.setText(String.format("Location: %.4f, %.4f", litterLocation.getLatitude(), litterLocation.getLongitude()));
             tvLocation.setVisibility(View.VISIBLE);
         }
