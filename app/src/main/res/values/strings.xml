@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">EcoScout</string>
-    <string name="eco_scout_text">Clean Communities\nOne Photo at a Time\n– Join EcoScout in the Fight Against Litter!</string>
+    <string name="eco_scout_text">A Click for Clean, A Future for Green!</string>
 
     //bwc (Barangay-Wide Cleanup)
     <string name="bwcLocation">Golden Country Homes
