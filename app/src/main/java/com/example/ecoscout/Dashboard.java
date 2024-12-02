@@ -34,7 +34,7 @@ public class Dashboard extends AppCompatActivity {
                 // Handle the "General" card click
                 Toast.makeText(Dashboard.this, "General Information", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the general information activity
-                // startActivity(new Intent(Dashboard.this, GeneralActivity.class));
+                startActivity(new Intent(Dashboard.this, Profile.class));
             }
         });
 

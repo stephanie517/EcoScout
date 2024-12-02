@@ -40,6 +40,9 @@
             android:name=".Dashboard"
             android:exported="true" />
         <activity
+            android:name=".Profile"
+            android:exported="true" />
+        <activity
             android:name=".LitterReporting"
             android:exported="true" />
 

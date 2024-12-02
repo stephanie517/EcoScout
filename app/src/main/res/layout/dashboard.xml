@@ -330,7 +330,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
@@ -338,19 +337,16 @@
             android:background="@color/background_color_50">
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/datePage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:icon="@drawable/calendar" />
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/idkPage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:icon="@drawable/increase" />
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/rewardPage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:icon="@drawable/medal" />
