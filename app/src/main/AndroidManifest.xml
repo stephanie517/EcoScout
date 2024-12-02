@@ -69,6 +69,12 @@
         <activity
             android:name=".Leaderboard"
             android:exported="true" />
+        <activity
+            android:name=".Badge"
+            android:exported="true" />
+        <activity
+            android:name=".Rewards"
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"
