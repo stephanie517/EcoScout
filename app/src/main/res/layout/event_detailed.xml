@@ -17,7 +17,8 @@
         android:textSize="24sp"
         android:textColor="@color/lavender"
         android:textStyle="bold"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:gravity="center" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="380dp"

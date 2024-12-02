@@ -7,6 +7,17 @@
     android:background="#F0F0F0"
     android:padding="16dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ECO CHAMPS\n Your Impact, Ranked!"
+        android:textSize="20sp"
+        android:textColor="@color/lavender"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:textStyle="bold" />
+
     <!-- Top 3 Leaderboard Section -->
     <LinearLayout
         android:layout_width="match_parent"
