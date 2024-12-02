@@ -7,6 +7,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.material.tabs.TabLayout;
+
 public class Dashboard extends AppCompatActivity {
 
     private CardView cardGeneral, cardLitterReport, cardMap, cardCleanUp, cardLeaderboard, cardResources;
@@ -72,7 +74,7 @@ public class Dashboard extends AppCompatActivity {
                 // Handle the "Leaderboard" card click
                 Toast.makeText(Dashboard.this, "Leaderboard", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the leaderboard activity
-                // startActivity(new Intent(Dashboard.this, LeaderboardActivity.class));
+                startActivity(new Intent(Dashboard.this, Leaderboard.class));
             }
         });
 
@@ -83,6 +85,27 @@ public class Dashboard extends AppCompatActivity {
                 Toast.makeText(Dashboard.this, "Resources", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the resources activity
                 startActivity(new Intent(Dashboard.this, ProperDisposal.class));
+            }
+        });
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                if (position == 2) { // Assuming reward is the third tab
+                    startActivity(new Intent(Dashboard.this, Rewards.class));
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                // Optional: leave empty
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // Optional: leave empty
             }
         });
     }

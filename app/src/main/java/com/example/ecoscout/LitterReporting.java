@@ -1,6 +1,8 @@
 package com.example.ecoscout;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,14 +13,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast; // Import Toast
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class LitterReporting extends AppCompatActivity {
 
-    private Button btnTakePhoto, btnUploadPhoto, btnSubmitReport, btnSelectLocation;
+    private ImageView btnUploadPhoto;
+    private Button btnSubmitReport, btnSelectLocation;
     private ImageView imgCapturedPhoto;
     private TextView tvImageAnalysisResult, tvLocation, tvManualInputLabel;
     private EditText etManualLitterType;
@@ -30,29 +39,18 @@ public class LitterReporting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_litter);
 
-        btnTakePhoto = findViewById(R.id.btnTakePhoto);
         btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
         btnSubmitReport = findViewById(R.id.btnSubmitReport);
-        btnSelectLocation = findViewById(R.id.btnSelectLocation); // Ensure this button exists in your layout
+        btnSelectLocation = findViewById(R.id.btnSelectLocation);
         imgCapturedPhoto = findViewById(R.id.imgCapturedPhoto);
         tvImageAnalysisResult = findViewById(R.id.tvImageAnalysisResult);
         tvLocation = findViewById(R.id.tvLocation);
         tvManualInputLabel = findViewById(R.id.tvManualInputLabel);
         etManualLitterType = findViewById(R.id.etManualLitterType);
 
-        // Take Photo Button Click
-        btnTakePhoto.setOnClickListener(v -> {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, 1);
-            }
-        });
-
-        // Upload Photo Button Click
+        // Upload Photo ImageView Click
         btnUploadPhoto.setOnClickListener(v -> {
-            Intent uploadPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-            uploadPhotoIntent.setType("image/*");
-            startActivityForResult(uploadPhotoIntent, 2);
+            showUploadOptions();
         });
 
         // Select Location Button Click
@@ -71,12 +69,37 @@ public class LitterReporting extends AppCompatActivity {
         });
     }
 
-    // Handle the image capture result
+    private void showUploadOptions() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_upload, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        Button btnTakePhoto = bottomSheetView.findViewById(R.id.btnTakePhoto);
+        Button btnUploadFromGallery = bottomSheetView.findViewById(R.id.btnUploadFromGallery);
+
+        btnTakePhoto.setOnClickListener(v -> {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, 1);
+            }
+            bottomSheetDialog.dismiss();
+        });
+
+        btnUploadFromGallery.setOnClickListener(v -> {
+            Intent uploadPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            uploadPhotoIntent.setType("image/*");
+            startActivityForResult(uploadPhotoIntent, 2);
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            Uri imageUri = data.getData(); // Get the URI from the Intent
+            Uri imageUri = data.getData();
             imgCapturedPhoto.setImageURI(imageUri);
             imgCapturedPhoto.setVisibility(View.VISIBLE);
             analyzeImage(data);
@@ -91,13 +114,44 @@ public class LitterReporting extends AppCompatActivity {
                 litterLocation = new Location("manual");
                 litterLocation.setLatitude(location.latitude);
                 litterLocation.setLongitude(location.longitude);
-                tvLocation.setText("Location: Lat: " + litterLocation.getLatitude() + ", Lon: " + litterLocation.getLongitude());
-                tvLocation.setVisibility(View.VISIBLE);
+
+                // Get the address from latitude and longitude
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                try {
+                    List<Address> addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1);
+                    String locationText;
+                    if (addresses != null && addresses.size() > 0) {Address address = addresses.get(0);
+                        // Create a more readable address string
+                        locationText = "";
+                        if (address.getThoroughfare() != null) {
+                            locationText += address.getThoroughfare() + ", ";
+                        }
+                        if (address.getLocality() != null) {
+                            locationText += address.getLocality() + ", ";
+                        }
+                        if (address.getAdminArea() != null) {
+                            locationText += address.getAdminArea() + ", ";
+                        }
+                        if (address.getCountryName() != null) {
+                            locationText += address.getCountryName();
+                        }
+                    } else {
+                        // Fallback to coordinates if no address found
+                        locationText = String.format("Location: %.4f, %.4f", location.latitude, location.longitude);
+                    }
+
+                    tvLocation.setText(locationText);
+                    tvLocation.setVisibility(View.VISIBLE);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // Fallback to coordinates if geocoding fails
+                    tvLocation.setText(String.format("Location: %.4f, %.4f", location.latitude, location.longitude));
+                    tvLocation.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
 
-    // Simulate image recognition analysis
     private void analyzeImage(Intent data) {
         String recognizedLitterType = "Plastic"; // Simulated result
         tvImageAnalysisResult.setText("Analysis Result: " + recognizedLitterType);
@@ -107,12 +161,14 @@ public class LitterReporting extends AppCompatActivity {
         litterType = recognizedLitterType;
     }
 
-    // Submit the litter report
-    private void submitLitterReport(Location location, String litterType)
-    {
+    private void submitLitterReport(Location location, String litterType) {
         String report = "Litter Type: " + litterType + "\nLocation: " + location.getLatitude() + ", " + location.getLongitude();
-        Log.d("LitterReport", report);
+        Log.d(" LitterReport", report);
         Toast.makeText(this, "Report submitted successfully!", Toast.LENGTH_SHORT).show();
+
+        // Navigate to the ReportListActivity
+        Intent intent = new Intent(LitterReporting.this, ReportListActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -121,12 +177,35 @@ public class LitterReporting extends AppCompatActivity {
         tagLocation(); // Optional: Automatically tag the user's current location
     }
 
-    // Optional: Automatically tag the user's current location
     private void tagLocation() {
         litterLocation = new Location("dummyProvider");
         litterLocation.setLatitude(14.5995);
         litterLocation.setLongitude(120.9842);
-        tvLocation.setText("Location: Lat: " + litterLocation.getLatitude() + ", Lon: " + litterLocation.getLongitude());
-        tvLocation.setVisibility(View.VISIBLE);
+
+        // Use Geocoder to get a readable location name
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(14.5995, 120.9842, 1);
+            if (addresses != null && addresses.size() > 0) {
+                Address address = addresses.get(0);
+                String locationText = "";
+                if (address.getLocality() != null) {
+                    locationText += address.getLocality() + ", ";
+                }
+                if (address.getAdminArea() != null) {
+                    locationText += address.getAdminArea();
+                }
+                tvLocation.setText(locationText);
+            } else {
+                // Fallback to coordinates if no address found
+                tvLocation.setText(String.format("Location: %.4f, %.4f", litterLocation.getLatitude(), litterLocation.getLongitude()));
+            }
+            tvLocation.setVisibility(View.VISIBLE);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Fallback to coordinates if geocoding fails
+            tvLocation.setText(String.format("Location: %.4f, %.4f", litterLocation.getLatitude(), litterLocation.getLongitude()));
+            tvLocation.setVisibility(View.VISIBLE);
+        }
     }
 }

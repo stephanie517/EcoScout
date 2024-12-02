@@ -13,11 +13,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/detailName"
         android:layout_marginTop="14dp"
-        android:text="Recipe Name"
+        android:text="Event Name"
         android:textSize="24sp"
         android:textColor="@color/lavender"
         android:textStyle="bold"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:gravity="center" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="380dp"
@@ -47,7 +48,7 @@
         android:textStyle="bold"
         android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -55,7 +56,7 @@
         android:text="date"
         android:layout_marginStart="10dp"
         android:textSize="16sp"
-        android:id="@+id/detailDate"/>
+        android:id="@+id/detailDate" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,7 +66,7 @@
         android:textStyle="bold"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -73,7 +74,7 @@
         android:text="@string/bwcLocation"
         android:layout_marginStart="10dp"
         android:textSize="16sp"
-        android:id="@+id/detailLocation"/>
+        android:id="@+id/detailLocation" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -83,7 +84,7 @@
         android:textStyle="bold"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:textSize="18sp"/>
+        android:textSize="18sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -91,6 +92,17 @@
         android:text="@string/bwcDesc"
         android:layout_marginStart="10dp"
         android:textSize="16sp"
-        android:id="@+id/detailDesc"/>
+        android:id="@+id/detailDesc" />
+
+    <Button
+        android:id="@+id/joinNowButton"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="90dp"
+        android:layout_marginBottom="10dp"
+        android:text="Join Now"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
 
 </LinearLayout>
