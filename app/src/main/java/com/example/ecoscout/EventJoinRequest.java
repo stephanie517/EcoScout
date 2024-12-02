@@ -48,6 +48,9 @@ public class EventJoinRequest extends AppCompatActivity {
             // Simulate sending join request
             Toast.makeText(this, "Joining Event...\nMessage: " + (message.isEmpty() ? "No message provided" : message), Toast.LENGTH_LONG).show();
 
+            // Display points message
+            Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
+
             // TODO: Save to database or API call to send the join request
 
             // Redirect to main page
