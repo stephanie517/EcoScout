@@ -1,105 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/litter_free"
-    android:padding="16dp">
+    android:background="@android:color/white">
 
-    <!-- Main Title -->
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Litter Free Starts with Me"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:gravity="center"
-        android:background="#80000000"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp"/>
+        android:background="@android:color/transparent">
 
-    <!-- Take Photo Button -->
-    <Button
-        android:id="@+id/btnTakePhoto"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:title="Litter Reporting"
+            app:titleTextColor="@color/dark_green"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Take a Photo"
-        android:layout_marginBottom="8dp"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="16dp">
 
-    <!-- Upload Photo Section -->
-    <Button
-        android:id="@+id/btnUploadPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@drawable/button_background"
-        android:layout_margin="16dp"
-        android:gravity="center"
-        android:padding="12dp"
-        android:text="Upload a Photo"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
 
-    <!-- Display Image After Capture -->
-    <ImageView
-        android:id="@+id/imgCapturedPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="16dp"
-        android:contentDescription="Captured Image"
-        android:scaleType="centerCrop"
-        android:visibility="gone" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
-    <!-- Image Analysis Result -->
-    <TextView
-        android:id="@+id/tvImageAnalysisResult"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Analysis Result: "
-        android:layout_marginTop="16dp"
-        android:textSize="16sp"
-        android:visibility="gone" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-    <!-- Manual Input for Litter Type -->
-    <TextView
-        android:id="@+id/tvManualInputLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="If not recognized, categorize manually:"
-        android:layout_marginTop="16dp" />
+                    <ImageView
+                        android:id="@+id/btnUploadPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="centerInside"
+                        android:background="@drawable/upload_photo"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:contentDescription="Upload Litter Photo"/>
 
-    <EditText
-        android:id="@+id/etManualLitterType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Litter Type"
-        android:visibility="gone" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tap to Upload Photo"
+                        android:textAlignment="center"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/dark_green"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-    <!-- Location Tagging -->
-    <Button
-        android:id ="@+id/btnSelectLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Location"
-        android:layout_marginTop="16dp"/>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/tvLocation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Location: Not Tagged"
-        android:layout_marginTop="16dp"
-        android:textSize="16sp"
-        android:visibility="gone" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-    <!-- Submit Button -->
-    <Button
-        android:id="@+id/btnSubmitReport"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Submit Report"
-        android:visibility="gone"
-        android:layout_marginTop="16dp"/>
+                    <ImageView
+                        android:id="@+id/imgCapturedPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        android:background="@android:color/white"/>
 
-</LinearLayout>
+                    <TextView
+                        android:id="@+id/tvImageAnalysisResult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/dark_green"
+                        android:visibility="gone"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilManualLitterType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <!-- Missing Label Added Here -->
+                        <TextView
+                            android:id="@+id/tvManualInputLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Enter Litter Type Manually"
+                            android:textColor="@color/dark_green"
+                            android:visibility="visible"/>
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etManualLitterType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter Litter Type"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSelectLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Select Location"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:textColor="@color/dark_green"
+                        app:strokeColor="@color/dark_green"/>
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/dark_green"
+                        android:visibility="gone"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSubmitReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit Report"
+                android:backgroundTint="@color/dark_green"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
