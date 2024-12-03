@@ -53,5 +53,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
+    implementation ("com.google.firebase:firebase-storage:21.0.1")
+    implementation ("com.google.firebase:firebase-firestore:24.0.0")
+    implementation ("com.google.android.gms:play-services-location:18.0.0")
 
 }

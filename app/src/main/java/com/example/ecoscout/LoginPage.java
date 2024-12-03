@@ -39,7 +39,6 @@ public class LoginPage extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
-        // Set up the login button click listener
         buttonLogin.setOnClickListener(v -> {
             String email = editTextEmail.getText().toString();
             String password = editTextPassword.getText().toString();

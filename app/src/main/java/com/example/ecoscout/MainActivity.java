@@ -7,6 +7,8 @@ import android.widget.Button;
 import pl.droidsonroids.gif.GifImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.FirebaseApp;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button buttonSignUp;
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_main);
 
         // Initialize the Sign Up button and GifImageView
