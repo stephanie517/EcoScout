@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -44,8 +45,11 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.play.services.maps)
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.23")
+    implementation ("com.google.firebase:firebase-database:20.4.0")
+    implementation ("com.google.firebase:firebase-auth:22.1.0")
 }

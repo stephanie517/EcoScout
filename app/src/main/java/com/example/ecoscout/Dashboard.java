@@ -27,11 +27,9 @@ public class Dashboard extends AppCompatActivity {
         cardResources = findViewById(R.id.cardResources);
 
         // Set onClickListeners for each CardView
-
         cardGeneral.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "General" card click
                 Toast.makeText(Dashboard.this, "General Information", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the general information activity
                 startActivity(new Intent(Dashboard.this, Profile.class));
@@ -41,7 +39,6 @@ public class Dashboard extends AppCompatActivity {
         cardLitterReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Litter Report" card click
                 Toast.makeText(Dashboard.this, "Litter Reporting", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the litter reporting activity
                 startActivity(new Intent(Dashboard.this, LitterReporting.class));
@@ -51,7 +48,6 @@ public class Dashboard extends AppCompatActivity {
         cardMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "View Map" card click
                 Toast.makeText(Dashboard.this, "View Map", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the map activity
                 // startActivity(new Intent(Dashboard.this, MapActivity.class));
@@ -61,7 +57,6 @@ public class Dashboard extends AppCompatActivity {
         cardCleanUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Cleanup Event Coordination" card click
                 Toast.makeText(Dashboard.this, "Cleanup Event Coordination", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the cleanup event coordination activity
                 startActivity(new Intent(Dashboard.this, Event.class));
@@ -71,7 +66,6 @@ public class Dashboard extends AppCompatActivity {
         cardLeaderboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Leaderboard" card click
                 Toast.makeText(Dashboard.this, "Leaderboard", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the leaderboard activity
                 startActivity(new Intent(Dashboard.this, Leaderboard.class));
@@ -81,7 +75,6 @@ public class Dashboard extends AppCompatActivity {
         cardResources.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the "Resources" card click
                 Toast.makeText(Dashboard.this, "Resources", Toast.LENGTH_SHORT).show();
                 // Example: Navigate to the resources activity
                 startActivity(new Intent(Dashboard.this, ProperDisposal.class));
