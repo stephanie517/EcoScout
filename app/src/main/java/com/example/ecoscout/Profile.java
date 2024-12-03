@@ -19,7 +19,7 @@ public class Profile extends AppCompatActivity {
     private EditText etName, etEmail;
     private TextView tvLitterReports, tvEventsAttended;
     private Button btnSaveProfile, btnEditProfile;
-    private ProfileData profileData;
+    private ProfileData profileData; // Declare ProfileData
 
     // Firestore instance
     private FirebaseFirestore db;
@@ -41,8 +41,8 @@ public class Profile extends AppCompatActivity {
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
         btnEditProfile = findViewById(R.id.btnEditProfile);
 
-        // Initialize ProfileData (in a real app, this would come from a database or shared preferences)
-        profileData = new ProfileData();
+        // Initialize ProfileData using the Singleton instance
+        profileData = ProfileData.getInstance(); // Use getInstance() method
         loadProfileData();
 
         // Edit Profile Button
@@ -71,7 +71,7 @@ public class Profile extends AppCompatActivity {
     }
 
     private void loadProfileData() {
-        // In a real app, load from database or SharedPreferences
+        // Load data from ProfileData
         etName.setText(profileData.getName());
         etEmail.setText(profileData.getEmail());
 
@@ -81,7 +81,7 @@ public class Profile extends AppCompatActivity {
     }
 
     private void saveProfileData() {
-        // In a real app, save to database or SharedPreferences
+        // Save data to ProfileData
         profileData.setName(etName.getText().toString());
         profileData.setEmail(etEmail.getText().toString());
     }

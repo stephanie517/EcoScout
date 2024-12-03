@@ -1,5 +1,6 @@
 package com.example.ecoscout;
 
+
 public class LitterReport {
     private String litterType;
     private double latitude;

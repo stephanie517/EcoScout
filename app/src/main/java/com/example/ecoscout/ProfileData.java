@@ -1,14 +1,25 @@
 package com.example.ecoscout;
 
 public class ProfileData {
+    private static ProfileData instance; // Singleton instance
     private String name;
     private String email;
     private String profileImagePath;
+    private int litterReportCount; // Add this field
 
-    // Default constructor
-    public ProfileData() {
+    // Private constructor to prevent instantiation
+    private ProfileData() {
         this.name = "EcoScout User";
         this.email = "user@ecoscout.com";
+        this.litterReportCount = 0; // Initialize count
+    }
+
+    // Method to get the singleton instance
+    public static ProfileData getInstance() {
+        if (instance == null) {
+            instance = new ProfileData();
+        }
+        return instance;
     }
 
     // Getters and Setters
@@ -34,5 +45,13 @@ public class ProfileData {
 
     public void setProfileImagePath(String profileImagePath) {
         this.profileImagePath = profileImagePath;
+    }
+
+    public int getLitterReportCount() { // Getter for litter report count
+        return litterReportCount;
+    }
+
+    public void setLitterReportCount(int count) { // Setter for litter report count
+        this.litterReportCount = count;
     }
 }
