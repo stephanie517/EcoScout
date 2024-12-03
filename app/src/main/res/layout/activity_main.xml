@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,66 +5,88 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- Background Image that fits the entire screen without margin -->
+    <!-- Background Image -->
     <ImageView
         android:id="@+id/background_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:src="@drawable/litter_free"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- EcoScout Logo -->
     <ImageView
         android:id="@+id/logo"
         android:layout_width="112dp"
         android:layout_height="82dp"
+        android:layout_margin="16dp"
         android:src="@drawable/logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Corrected to GifImageView -->
+    <!-- Tagline -->
+    <TextView
+        android:id="@+id/tagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="A Click for Clean, A Future for Green!"
+        android:textColor="@color/accent_green"
+        android:textSize="18sp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <!-- GIF Icon -->
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/taking_photo_gif"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="92dp"
+        android:src="@drawable/taking_photo"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo"
-        android:src="@drawable/taking_photo" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/ecoScoutText"
-        android:layout_width="347dp"
-        android:layout_height="225dp"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/poppins_semibold"
-        android:gravity="center"
-        android:text="@string/eco_scout_text"
-        android:textColor="@color/accent_green"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/taking_photo_gif" />
-
-    <Button
-        android:id="@+id/sign_up_button"
+    <!-- Horizontal Button Layout -->
+    <LinearLayout
+        android:id="@+id/buttonGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
-        android:backgroundTint="@color/dark_green"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="Sign Up"
-        android:textColor="@android:color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Sign Up Button -->
+        <Button
+            android:id="@+id/sign_up_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/dark_green"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Sign Up"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <!-- Log In Button -->
+        <Button
+            android:id="@+id/log_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/dark_green"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Log In"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the Sign Up button and GifImageView
         buttonSignUp = findViewById(R.id.sign_up_button);
+        Button logInButton = findViewById(R.id.log_in_button);
         gifImageView = findViewById(R.id.taking_photo_gif);
 
         // Set click listener for Sign Up button
@@ -27,6 +28,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Navigate to SignupActivity
                 Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        logInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to LogInActivity (create if necessary)
+                Intent intent = new Intent(MainActivity.this, LoginPage.class);
                 startActivity(intent);
             }
         });
