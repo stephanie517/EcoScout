@@ -79,6 +79,7 @@
             android:textSize="14sp" />
 
         <!-- Log In Button -->
+
         <Button
             android:id="@+id/log_in_button"
             android:layout_width="wrap_content"
