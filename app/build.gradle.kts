@@ -38,7 +38,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -46,10 +45,13 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.23")
-    implementation ("com.google.firebase:firebase-database:20.4.0")
-    implementation ("com.google.firebase:firebase-auth:22.1.0")
+    implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.23")
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-auth")
+
 }

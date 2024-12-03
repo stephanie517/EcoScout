@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "150271275690",
+    "firebase_url": "https://ecoscoutapp-default-rtdb.firebaseio.com",
     "project_id": "ecoscoutapp",
     "storage_bucket": "ecoscoutapp.firebasestorage.app"
   },
