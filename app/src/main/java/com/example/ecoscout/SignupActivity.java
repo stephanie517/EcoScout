@@ -46,18 +46,34 @@ public class SignupActivity extends AppCompatActivity {
             String password = editTextPassword.getText().toString().trim();
             String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-            if (fullName.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(SignupActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
-                return;
+            if (validateInput(fullName, address, phone, email, password, confirmPassword)) {
+                registerUser(fullName, address, phone, email, password);
             }
-
-            if (!password.equals(confirmPassword)) {
-                Toast.makeText(SignupActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            registerUser(fullName, address, phone, email, password);
         });
+    }
+
+    private boolean validateInput(String fullName, String address, String phone, String email, String password, String confirmPassword) {
+        if (fullName.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Enter a valid email address", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (phone.length() < 10) {
+            Toast.makeText(this, "Enter a valid phone number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (password.length() < 6) {
+            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
     private void registerUser(String fullName, String address, String phone, String email, String password) {
@@ -66,18 +82,17 @@ public class SignupActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
-                            // Encode the fullName to be used as a valid Firebase key
-                            String userKey = fullName.replace(".", "").replace("#", "")
-                                    .replace("$", "").replace("[", "").replace("]", "");
+                            String userId = firebaseUser.getUid();
 
                             // Save user details to Firebase Database
                             HashMap<String, String> userMap = new HashMap<>();
+                            userMap.put("userId", userId);
                             userMap.put("fullName", fullName);
                             userMap.put("address", address);
                             userMap.put("phone", phone);
                             userMap.put("email", email);
 
-                            databaseReference.child(userKey).setValue(userMap)
+                            databaseReference.child(userId).setValue(userMap)
                                     .addOnCompleteListener(saveTask -> {
                                         if (saveTask.isSuccessful()) {
                                             Toast.makeText(SignupActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
