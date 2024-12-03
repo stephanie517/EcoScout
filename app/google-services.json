@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "150271275690",
+    "project_id": "ecoscoutapp",
+    "storage_bucket": "ecoscoutapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150271275690:android:66c82dc1bd6d3e5c2a16d3",
+        "android_client_info": {
+          "package_name": "com.example.ecoscout"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA99JkgbuDL_hQ-V2pmsjbrHugmkQErFgY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
