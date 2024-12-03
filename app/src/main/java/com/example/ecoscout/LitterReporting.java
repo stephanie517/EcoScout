@@ -14,11 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,10 +36,16 @@ public class LitterReporting extends AppCompatActivity {
     private String litterType = "";
     private Location litterLocation;
 
+    // Firestore instance
+    private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_litter);
+
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
 
         // Initializing UI elements
         btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
@@ -164,9 +172,37 @@ public class LitterReporting extends AppCompatActivity {
         Log.d("LitterReport", report);
         Toast.makeText(this, "Report submitted successfully!", Toast.LENGTH_SHORT).show();
 
-        // Navigate to the ReportListActivity
-        Intent intent = new Intent(LitterReporting.this, ReportListActivity.class);
-        startActivity(intent);
+        // Create a LitterReport object
+        LitterReport litterReport = new LitterReport(litterType, location.getLatitude(), location.getLongitude());
+
+        // Add the report to Firestore
+        db.collection("litterReports")
+                .add(litterReport)
+                .addOnSuccessListener(documentReference -> {
+                    Log.d("Firestore", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    // Update the profile data with the new litter report count
+                    updateProfileWithNewReport();
+                })
+                .addOnFailureListener(e -> Log.w("Firestore", "Error adding document", e));
+    }
+
+    private void updateProfileWithNewReport() {
+        // Fetch the updated count of litter reports and update the profile
+        FirebaseFirestore.getInstance().collection("litterReports")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        int count = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            count++;
+                        }
+                        // Update the profile data directly if needed
+                        // For example, using a static method or a singleton pattern to manage profile data
+                        ProfileData.getInstance().setLitterReportCount(count);
+                    } else {
+                        Toast.makeText(this, "Failed to update profile data", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     // Automatically tag the user's current location on start (can be customized)

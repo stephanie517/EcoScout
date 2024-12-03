@@ -1,6 +1,5 @@
 package com.example.ecoscout;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,18 +10,27 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 public class Profile extends AppCompatActivity {
 
     private ImageView profileImage;
     private EditText etName, etEmail;
     private TextView tvLitterReports, tvEventsAttended;
     private Button btnSaveProfile, btnEditProfile;
-    private ProfileData profileData;
+    private ProfileData profileData; // Declare ProfileData
+
+    // Firestore instance
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
 
         // Initialize views
         profileImage = findViewById(R.id.profileImage);
@@ -33,8 +41,8 @@ public class Profile extends AppCompatActivity {
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
         btnEditProfile = findViewById(R.id.btnEditProfile);
 
-        // Initialize ProfileData (in a real app, this would come from a database or shared preferences)
-        profileData = new ProfileData();
+        // Initialize ProfileData using the Singleton instance
+        profileData = ProfileData.getInstance(); // Use getInstance() method
         loadProfileData();
 
         // Edit Profile Button
@@ -63,32 +71,41 @@ public class Profile extends AppCompatActivity {
     }
 
     private void loadProfileData() {
-        // In a real app, load from database or SharedPreferences
+        // Load data from ProfileData
         etName.setText(profileData.getName());
         etEmail.setText(profileData.getEmail());
 
         // Fetch and display user's environmental contributions
-        int litterReports = getLitterReportCount();
-        int eventsAttended = getEventsAttendedCount();
-
-        tvLitterReports.setText("Litter Reports: " + litterReports);
-        tvEventsAttended.setText("Events Attended: " + eventsAttended);
+        getLitterReportCount();
+        getEventsAttendedCount();
     }
 
     private void saveProfileData() {
-        // In a real app, save to database or SharedPreferences
+        // Save data to ProfileData
         profileData.setName(etName.getText().toString());
         profileData.setEmail(etEmail.getText().toString());
     }
 
-    // Simulated methods to get report and event counts
-    private int getLitterReportCount() {
-        // TODO: Replace with actual database query
-        return 5; // Example count
+    private void getLitterReportCount() {
+        // Fetch the count of litter reports from Firestore
+        db.collection("litterReports")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        int count = 0;
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // You can add additional filtering logic here if needed
+                            count++;
+                        }
+                        tvLitterReports.setText("Litter Reports: " + count);
+                    } else {
+                        Toast.makeText(this, "Failed to load litter reports", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    private int getEventsAttendedCount() {
-        // TODO: Replace with actual database query
-        return 3; // Example count
+    private void getEventsAttendedCount() {
+        // TODO: Replace with actual database query for events attended
+        tvEventsAttended.setText("Events Attended: " + 3); // Example count
     }
 }
