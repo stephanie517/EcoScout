@@ -27,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Navigate to SignupActivity
-                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this, SignupActivity.class));
             }
         });
 
@@ -36,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Navigate to LogInActivity (create if necessary)
-                Intent intent = new Intent(MainActivity.this, LoginPage.class);
-                startActivity(intent);
+                startActivity(new Intent(MainActivity.this, LoginPage.class));
             }
         });
 
