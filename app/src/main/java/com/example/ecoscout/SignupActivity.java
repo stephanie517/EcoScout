@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,12 +39,12 @@ public class SignupActivity extends AppCompatActivity {
         buttonSignup = findViewById(R.id.buttonSignup);
 
         buttonSignup.setOnClickListener(v -> {
-            String fullName = editTextFullName.getText().toString();
-            String address = editTextAddress.getText().toString();
-            String phone = editTextPhone.getText().toString();
-            String email = editTextEmail.getText().toString();
-            String password = editTextPassword.getText().toString();
-            String confirmPassword = editTextConfirmPassword.getText().toString();
+            String fullName = editTextFullName.getText().toString().trim();
+            String address = editTextAddress.getText().toString().trim();
+            String phone = editTextPhone.getText().toString().trim();
+            String email = editTextEmail.getText().toString().trim();
+            String password = editTextPassword.getText().toString().trim();
+            String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
             if (fullName.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(SignupActivity.this, "All fields are required", Toast.LENGTH_SHORT).show();
@@ -67,7 +66,9 @@ public class SignupActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         if (firebaseUser != null) {
-                            String userId = firebaseUser.getUid();
+                            // Encode the fullName to be used as a valid Firebase key
+                            String userKey = fullName.replace(".", "").replace("#", "")
+                                    .replace("$", "").replace("[", "").replace("]", "");
 
                             // Save user details to Firebase Database
                             HashMap<String, String> userMap = new HashMap<>();
@@ -76,7 +77,7 @@ public class SignupActivity extends AppCompatActivity {
                             userMap.put("phone", phone);
                             userMap.put("email", email);
 
-                            databaseReference.child(userId).setValue(userMap)
+                            databaseReference.child(userKey).setValue(userMap)
                                     .addOnCompleteListener(saveTask -> {
                                         if (saveTask.isSuccessful()) {
                                             Toast.makeText(SignupActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
