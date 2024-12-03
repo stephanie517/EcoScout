@@ -49,8 +49,8 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(Dashboard.this, "View Map", Toast.LENGTH_SHORT).show();
-                // Example: Navigate to the map activity
-                // startActivity(new Intent(Dashboard.this, MapActivity.class));
+                // Navigate to the ViewMapActivity
+                startActivity(new Intent(Dashboard.this, ViewMapActivity.class));
             }
         });
 
