@@ -21,19 +21,19 @@ public class TutorialsActivity extends AppCompatActivity {
 
         // Recyclables Video
         playRecyclablesVideo.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.example.com/recyclables-tutorial"));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/M7hI3sjyw8M?feature=shared"));
             startActivity(intent);
         });
 
         // Composting Video
         playCompostingVideo.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.example.com/composting-tutorial"));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/Ypw1PT0cEEI?feature=shared"));
             startActivity(intent);
         });
 
         // E-Waste Video
         playEWasteVideo.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.example.com/e-waste-tutorial"));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/_Y2ePj3wr8M?feature=shared"));
             startActivity(intent);
         });
     }

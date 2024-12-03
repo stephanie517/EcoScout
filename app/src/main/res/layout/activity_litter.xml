@@ -86,14 +86,6 @@
                         android:visibility="gone"
                         android:background="@android:color/white"/>
 
-                    <TextView
-                        android:id="@+id/tvImageAnalysisResult"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:textColor="@color/dark_green"
-                        android:visibility="gone"/>
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilManualLitterType"
                         android:layout_width="match_parent"
