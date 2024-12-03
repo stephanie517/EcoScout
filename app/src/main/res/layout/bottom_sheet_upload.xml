@@ -1,19 +1,66 @@
-<!-- res/layout/bottom_sheet_upload.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white"
+    android:layout_margin="16dp"
+    android:elevation="4dp">
 
-    <Button
-        android:id="@+id/btnTakePhoto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Take Photo" />
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:padding="16dp"
+        android:gravity="center">
 
-    <Button
-        android:id="@+id/btnUploadFromGallery"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Upload from Gallery" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginEnd="16dp">
+
+            <ImageButton
+                android:id="@+id/btnTakePhoto"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/camera_icon"
+                android:contentDescription="Take Photo"
+                android:background="?android:attr/selectableItemBackground"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Take Photo"
+                android:layout_gravity="center"
+                android:paddingTop="8dp"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/btnUploadFromGallery"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="Upload from Gallery"
+                android:scaleType="fitCenter"
+                android:src="@drawable/gallery_icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload from Gallery"
+                android:layout_gravity="center"
+                android:paddingTop="8dp"
+                android:textAlignment="center"/>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

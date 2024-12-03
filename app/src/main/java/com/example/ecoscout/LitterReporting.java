@@ -14,13 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -82,10 +82,10 @@ public class LitterReporting extends AppCompatActivity {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_upload, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        Button btnTakePhoto = bottomSheetView.findViewById(R.id.btnTakePhoto);
-        Button btnUploadFromGallery = bottomSheetView.findViewById(R.id.btnUploadFromGallery);
+        ImageView btnTakePhoto = bottomSheetView.findViewById(R.id.btnTakePhoto);
+        ImageView btnUploadFromGallery = bottomSheetView.findViewById(R.id.btnUploadFromGallery);
 
-        // Take Photo Button Click
+        // Take Photo ImageButton Click
         btnTakePhoto.setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -94,7 +94,7 @@ public class LitterReporting extends AppCompatActivity {
             bottomSheetDialog.dismiss();
         });
 
-        // Upload from Gallery Button Click
+        // Upload from Gallery ImageButton Click
         btnUploadFromGallery.setOnClickListener(v -> {
             Intent uploadPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
             uploadPhotoIntent.setType("image/*");
@@ -170,7 +170,7 @@ public class LitterReporting extends AppCompatActivity {
     private void submitLitterReport(Location location, String litterType) {
         String report = "Litter Type: " + litterType + "\nLocation: " + location.getLatitude() + ", " + location.getLongitude();
         Log.d("LitterReport", report);
-        Toast.makeText(this, "Report submitted successfully!", Toast.LENGTH_SHORT).show();
+        Toast .makeText(this, "Report submitted successfully!", Toast.LENGTH_SHORT).show();
 
         // Create a LitterReport object
         LitterReport litterReport = new LitterReport(litterType, location.getLatitude(), location.getLongitude());
