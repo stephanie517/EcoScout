@@ -25,12 +25,7 @@ public class Rewards extends AppCompatActivity {
         // Setup RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerViewBadges);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-        BadgeAdapter adapter = new BadgeAdapter(badges, currentUserPoints) {
-            @Override
-            public void onBindViewHolder(@NonNull BadgeViewHolder holder, int position) {
-
-            }
-        };
+        BadgeAdapter adapter = new BadgeAdapter(badges, currentUserPoints);
         recyclerView.setAdapter(adapter);
     }
 

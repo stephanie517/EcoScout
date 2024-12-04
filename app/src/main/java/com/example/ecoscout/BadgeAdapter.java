@@ -38,7 +38,8 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
 
     @Override
     public void onBindViewHolder(@NonNull BadgeViewHolder holder, int position) {
-
+        Badge badge = badges.get(position);
+        holder.bind(badge);
     }
 
     @Override
