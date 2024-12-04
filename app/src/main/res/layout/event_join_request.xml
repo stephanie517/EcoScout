@@ -98,7 +98,7 @@
             android:id="@+id/optionalMessage"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:hint="Add a message (e.g., questions, special needs, or confirmation)..."
+            android:hint="(e.g., questions, special needs, or confirmation)..."
             android:gravity="top"
             android:background="@drawable/rounded_edittext"
             android:padding="12dp"
