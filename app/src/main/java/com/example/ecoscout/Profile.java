@@ -50,6 +50,7 @@ public class Profile extends AppCompatActivity {
         return sharedPreferences.getString(KEY_PROFILE_IMAGE_URI, null);
     }
 
+
     // Firestore instance
     private FirebaseFirestore db;
 
