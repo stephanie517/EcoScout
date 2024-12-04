@@ -45,13 +45,14 @@ public class EventJoinRequest extends AppCompatActivity {
         confirmButton.setOnClickListener(v -> {
             String message = optionalMessage.getText().toString().trim();
 
-            // Simulate sending join request
-            Toast.makeText(this, "Joining Event...\nMessage: " + (message.isEmpty() ? "No message provided" : message), Toast.LENGTH_LONG).show();
+            // Add points for joining event
+            ProfileData profileData = ProfileData.getInstance();
+            profileData.addPoints(5);
+            profileData.incrementEventsJoined();
 
-            // Display points message
             Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
 
-            // TODO: Save to database or API call to send the join request
+            // TODO: Save event join to database
 
             // Redirect to main page
             Intent mainIntent = new Intent(EventJoinRequest.this, MainActivity.class);
