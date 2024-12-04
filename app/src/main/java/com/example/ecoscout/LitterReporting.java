@@ -321,8 +321,6 @@ public class LitterReporting extends AppCompatActivity {
         private String imageUrl;
         private long timestamp;
 
-        public LitterReport() {}
-
         public LitterReport(String userId, String litterType, double latitude,
                             double longitude, String imageUrl) {
             this.userId = userId;
