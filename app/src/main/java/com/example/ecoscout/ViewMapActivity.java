@@ -6,13 +6,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import androidx.fragment.app.Fragment;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser ;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -34,7 +36,11 @@ public class ViewMapActivity extends AppCompatActivity implements OnMapReadyCall
         litterLocations = new ArrayList<>();
 
         // Set up the map fragment
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = new SupportMapFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, mapFragment) // Use the FrameLayout as the container
+                .commit();
+
         mapFragment.getMapAsync(this);
     }
 
@@ -45,23 +51,30 @@ public class ViewMapActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void loadLitterReports() {
-        db.collection("litterReports")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            LitterReport report = document.toObject(LitterReport.class);
-                            LatLng location = new LatLng(report.getLatitude(), report.getLongitude());
-                            litterLocations.add(location);
-                            mMap.addMarker(new MarkerOptions().position(location).title(report.getLitterType()));
+        FirebaseUser  currentUser  = FirebaseAuth.getInstance().getCurrentUser ();
+        if (currentUser  != null) {
+            String userId = currentUser .getUid();
+            db.collection("users").document(userId)
+                    .collection("litterReports")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                LitterReport report = document.toObject(LitterReport.class);
+                                LatLng location = new LatLng(report.getLatitude(), report.getLongitude());
+                                litterLocations.add(location);
+                                mMap.addMarker(new MarkerOptions().position(location).title(report.getLitterType()));
+                            }
+                            // Move the camera to the first report's location
+                            if (!litterLocations.isEmpty()) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(litterLocations.get(0), 12)); // Adjust zoom level
+                            }
+                        } else {
+                            Log.w("Firestore", "Error getting documents.", task.getException());
                         }
-                        // Move the camera to the first report's location
-                        if (!litterLocations.isEmpty()) {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(litterLocations.get(0), 12)); // Adjust zoom level
-                        }
-                    } else {
-                        Log.w("Firestore", "Error getting documents.", task.getException());
-                    }
-                });
+                    });
+        } else {
+            Log.w("ViewMapActivity", "User  not logged in.");
+        }
     }
 }
