@@ -17,9 +17,10 @@ public class Profile extends AppCompatActivity {
 
     private ImageView profileImage;
     private EditText etName, etEmail;
-    private TextView tvLitterReports, tvEventsAttended;
+    private TextView tvLitterReports;
     private Button btnSaveProfile, btnEditProfile;
-    private ProfileData profileData; // Declare ProfileData
+    private ProfileData profileData;
+    private TextView tvTotalPoints, tvEventsJoined;
 
     // Firestore instance
     private FirebaseFirestore db;
@@ -37,9 +38,10 @@ public class Profile extends AppCompatActivity {
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         tvLitterReports = findViewById(R.id.tvLitterReports);
-        tvEventsAttended = findViewById(R.id.tvEventsAttended);
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
         btnEditProfile = findViewById(R.id.btnEditProfile);
+        tvTotalPoints = findViewById(R.id.tvTotalPoints); // Add this to your layout
+        tvEventsJoined = findViewById(R.id.tvEventsJoined); // Add this to your layout
 
         // Initialize ProfileData using the Singleton instance
         profileData = ProfileData.getInstance(); // Use getInstance() method
@@ -71,13 +73,19 @@ public class Profile extends AppCompatActivity {
     }
 
     private void loadProfileData() {
+        ProfileData profileData = ProfileData.getInstance();
         // Load data from ProfileData
         etName.setText(profileData.getName());
         etEmail.setText(profileData.getEmail());
 
+        // Update points display
+        tvTotalPoints.setText("Total Points: " + profileData.getTotalPoints());
+
+        // Update events joined
+        tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
         // Fetch and display user's environmental contributions
         getLitterReportCount();
-        getEventsAttendedCount();
+        getLitterReportCount();
     }
 
     private void saveProfileData() {
@@ -104,8 +112,4 @@ public class Profile extends AppCompatActivity {
                 });
     }
 
-    private void getEventsAttendedCount() {
-        // TODO: Replace with actual database query for events attended
-        tvEventsAttended.setText("Events Attended: " + 3); // Example count
-    }
 }

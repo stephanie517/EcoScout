@@ -5,7 +5,6 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
     tools:context=".Dashboard">
 
     <ImageView
@@ -13,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/dashbord_bacground" />
+        android:src="@drawable/dashboard_bg" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -125,9 +124,9 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_margin="20dp"
-                        android:background="@drawable/transport_ing_background"
+                        android:background="@drawable/report_img_bg"
                         android:padding="25dp"
-                        android:src="@drawable/bus"
+                        android:src="@drawable/report"
                         app:tint="#fff" />
 
                     <TextView
@@ -172,9 +171,9 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_margin="20dp"
-                        android:background="@drawable/shopping_ing_background"
+                        android:background="@drawable/map_img_bg"
                         android:padding="25dp"
-                        android:src="@drawable/shopping_cart"
+                        android:src="@drawable/map"
                         app:tint="#fff" />
 
                     <TextView
@@ -213,9 +212,9 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_margin="20dp"
-                        android:background="@drawable/bills_img_background"
+                        android:background="@drawable/events_img_bg"
                         android:padding="25dp"
-                        android:src="@drawable/invoice"
+                        android:src="@drawable/event"
                         app:tint="#fff" />
 
                     <TextView
@@ -260,9 +259,9 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_margin="20dp"
-                        android:background="@drawable/entertainment_img_background"
+                        android:background="@drawable/leaderboard_img_bg"
                         android:padding="25dp"
-                        android:src="@drawable/video_camera"
+                        android:src="@drawable/increase"
                         app:tint="#fff" />
 
                     <TextView
@@ -301,9 +300,9 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_margin="20dp"
-                        android:background="@drawable/grocery_img_background"
+                        android:background="@drawable/resources_img_bg"
                         android:padding="25dp"
-                        android:src="@drawable/groceries"
+                        android:src="@drawable/resources"
                         app:tint="#fff" />
 
                     <TextView

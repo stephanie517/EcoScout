@@ -5,13 +5,17 @@ public class ProfileData {
     private String name;
     private String email;
     private String profileImagePath;
-    private int litterReportCount; // Add this field
+    private int litterReportCount;
+    private int totalPoints;
+    private int eventsJoined;// Add this field
 
     // Private constructor to prevent instantiation
     private ProfileData() {
         this.name = "EcoScout User";
         this.email = "user@ecoscout.com";
-        this.litterReportCount = 0; // Initialize count
+        this.litterReportCount = 0;
+        this.totalPoints = 0;
+        this.eventsJoined = 0;// Initialize count
     }
 
     // Method to get the singleton instance
@@ -20,6 +24,23 @@ public class ProfileData {
             instance = new ProfileData();
         }
         return instance;
+    }
+
+    // Add methods to manage points and events
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void addPoints(int points) {
+        this.totalPoints += points;
+    }
+
+    public int getEventsJoined() {
+        return eventsJoined;
+    }
+
+    public void incrementEventsJoined() {
+        this.eventsJoined++;
     }
 
     // Getters and Setters
