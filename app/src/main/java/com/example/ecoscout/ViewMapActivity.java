@@ -67,7 +67,7 @@ public class ViewMapActivity extends AppCompatActivity implements OnMapReadyCall
                             }
                             // Move the camera to the first report's location
                             if (!litterLocations.isEmpty()) {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(litterLocations.get(0), 12)); // Adjust zoom level
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(litterLocations.get(0), 12));
                             }
                         } else {
                             Log.w("Firestore", "Error getting documents.", task.getException());
