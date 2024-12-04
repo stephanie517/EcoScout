@@ -15,7 +15,7 @@ public class ProfileData {
         this.email = "user@ecoscout.com";
         this.litterReportCount = 0;
         this.totalPoints = 0;
-        this.eventsJoined = 0;// Initialize count
+        this.eventsJoined = 0;
     }
 
     // Method to get the singleton instance
