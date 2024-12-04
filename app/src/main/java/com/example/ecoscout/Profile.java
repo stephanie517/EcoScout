@@ -1,10 +1,12 @@
 package com.example.ecoscout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ public class Profile extends AppCompatActivity {
     private Button btnSaveProfile, btnEditProfile;
     private ProfileData profileData;
     private TextView tvTotalPoints, tvEventsJoined;
+    private LinearLayout achievementsContainer; // New addition
 
     // Firestore instance
     private FirebaseFirestore db;
@@ -40,11 +43,12 @@ public class Profile extends AppCompatActivity {
         tvLitterReports = findViewById(R.id.tvLitterReports);
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
         btnEditProfile = findViewById(R.id.btnEditProfile);
-        tvTotalPoints = findViewById(R.id.tvTotalPoints); // Add this to your layout
-        tvEventsJoined = findViewById(R.id.tvEventsJoined); // Add this to your layout
+        tvTotalPoints = findViewById(R.id.tvTotalPoints);
+        tvEventsJoined = findViewById(R.id.tvEventsJoined);
+        achievementsContainer = findViewById(R.id.achievementsContainer);
 
         // Initialize ProfileData using the Singleton instance
-        profileData = ProfileData.getInstance(); // Use getInstance() method
+        profileData = ProfileData.getInstance();
         loadProfileData();
 
         // Edit Profile Button
@@ -67,11 +71,18 @@ public class Profile extends AppCompatActivity {
 
         // Profile Image Click (for future image upload functionality)
         profileImage.setOnClickListener(v -> {
-            // TODO: Implement image upload from gallery or camera
             Toast.makeText(this, "Image upload coming soon!", Toast.LENGTH_SHORT).show();
+        });
+
+        achievementsContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Profile.this, Rewards.class));
+            }
         });
     }
 
+    // Rest of the methods remain the same as in your original code
     private void loadProfileData() {
         ProfileData profileData = ProfileData.getInstance();
         // Load data from ProfileData
@@ -83,8 +94,8 @@ public class Profile extends AppCompatActivity {
 
         // Update events joined
         tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
+
         // Fetch and display user's environmental contributions
-        getLitterReportCount();
         getLitterReportCount();
     }
 
@@ -111,5 +122,4 @@ public class Profile extends AppCompatActivity {
                     }
                 });
     }
-
 }
