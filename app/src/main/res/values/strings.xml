@@ -56,5 +56,6 @@
 \nSurigao del Norte</string>
     <string name="bcmDesc">A day-long beach cleanup event focused on the surfing areas of Siargao.
 \nSurf lessons will be offered at a discount for volunteers after the cleanup.</string>
+    <string name="default_web_client_id">150271275690-6rbvnilj4hgm54i36um8qnatsvm2tvab.apps.googleusercontent.com</string>
 
 </resources>

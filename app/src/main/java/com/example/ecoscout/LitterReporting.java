@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -44,9 +46,8 @@ public class LitterReporting extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 4;
 
     private ImageView btnUploadPhoto, imgCapturedPhoto;
-    private Button btnSubmitReport, btnSelectLocation;
-    private TextView tvLocation;
-    private Spinner spinnerLitterType;
+    private Button btnSubmitReport, btnSelectLocation, btnSelectLitterType;
+    private TextView tvLocation, tvCategorizationResult; // Added TextView for categorization result
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -55,7 +56,7 @@ public class LitterReporting extends AppCompatActivity {
     private Uri imageUri;
     private Location litterLocation;
 
-    private static final String[] LITTER_TYPES = {
+    private final String[] LITTER_TYPES = {
             "Food wrappers", "Plastic bottles", "Shopping bags", "Newspapers", "Cardboard boxes",
             "Receipts", "Broken glass bottles", "Jars", "Soda cans", "Tin foil",
             "Bottle caps", "Food scraps", "Leaves and twigs", "Cigarette butts", "Chewing gum",
@@ -69,6 +70,8 @@ public class LitterReporting extends AppCompatActivity {
             "Pool chemicals", "Refrigerants", "Compressed gas cylinders"
     };
 
+    private String selectedLitterType; // Store the selected litter type
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +81,6 @@ public class LitterReporting extends AppCompatActivity {
         initializeViews();
         setupListeners();
         requestLocationPermissions();
-        setupLitterTypeSpinner();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -109,15 +111,44 @@ public class LitterReporting extends AppCompatActivity {
         btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
         btnSubmitReport = findViewById(R.id.btnSubmitReport);
         btnSelectLocation = findViewById(R.id.btnSelectLocation);
+        btnSelectLitterType = findViewById(R.id.btnSelectLitterType); // Initialize the button
         imgCapturedPhoto = findViewById(R.id.imgCapturedPhoto);
         tvLocation = findViewById(R.id.tvLocation);
-        spinnerLitterType = findViewById(R.id.spinnerLitterType);
+        tvCategorizationResult = findViewById(R.id.tvCategorizationResult);
     }
 
     private void setupListeners() {
         btnUploadPhoto.setOnClickListener(v -> showUploadOptions());
         btnSelectLocation.setOnClickListener(v -> openMapActivity());
+        btnSelectLitterType.setOnClickListener(v -> showLitterTypeDialog()); // Show dialog on button click
         btnSubmitReport.setOnClickListener(v -> submitLitterReport());
+    }
+
+    private void showLitterTypeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Litter Type");
+
+        builder.setItems(LITTER_TYPES, (dialog, which) -> {
+            selectedLitterType = LITTER_TYPES[which]; // Store the selected litter type
+            Log.d("LitterReporting", "Selected Litter Type: " + selectedLitterType);
+
+            // Get points and update the categorization result
+            int points = categorizeLitterAndGetPoints(selectedLitterType);
+            Log.d("LitterReporting", "Points: " + points);
+
+            // Update the TextView with the categorization result
+            if (points == 20) {
+                tvCategorizationResult.setText("Selected litter type is hazardous.");
+            } else {
+                tvCategorizationResult.setText("Selected litter type is standard.");
+            }
+            tvCategorizationResult.setVisibility(View.VISIBLE); // Make it visible
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void requestLocationPermissions() {
@@ -167,7 +198,7 @@ public class LitterReporting extends AppCompatActivity {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_upload, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        bottomSheetView.findViewById(R.id.btnTakePhoto).setOnClickListener(v -> {
+        bottomSheetView.findViewById(R.id .btnTakePhoto).setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
             bottomSheetDialog.dismiss();
@@ -250,20 +281,11 @@ public class LitterReporting extends AppCompatActivity {
         };
 
         for (String part : addressParts) {
-            if (part != null) {
-                locationText.append(part).append(", ");
-            }
+            if (part != null) locationText.append(part).append(", ");
         }
-
         return locationText.length() > 0
                 ? locationText.substring(0, locationText.length() - 2)
                 : "Unknown Location";
-    }
-
-    private void setupLitterTypeSpinner() {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, LITTER_TYPES);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerLitterType.setAdapter(adapter);
     }
 
     private void submitLitterReport() {
@@ -273,13 +295,13 @@ public class LitterReporting extends AppCompatActivity {
             return;
         }
 
-        String selectedLitterType = spinnerLitterType.getSelectedItem().toString();
-        int points = categorizeLitterAndGetPoints(selectedLitterType);
-
-        if (litterLocation == null || selectedLitterType.isEmpty()) {
+        if (litterLocation == null || selectedLitterType == null || selectedLitterType.isEmpty()) {
             Toast.makeText(this, "Complete all fields", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        int points = categorizeLitterAndGetPoints(selectedLitterType);
+        Log.d("LitterReporting", "Points: " + points);
 
         if (imageUri != null) {
             uploadImageAndSaveReport(currentUser .getUid(), selectedLitterType, points);
@@ -312,12 +334,11 @@ public class LitterReporting extends AppCompatActivity {
         imageRef.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot ->
                         imageRef.getDownloadUrl().addOnSuccessListener(uri ->
-                                saveReportToFirestore(userId, litterType, uri.toString(), points)
-                        )
-                )
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show()
-                );
+                                        saveReportToFirestore(userId, litterType, uri.toString(), points)
+                                )
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show()
+                                ));
     }
 
     private void saveReportToFirestore(String userId, String litterType, String imageUrl, int points) {
