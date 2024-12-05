@@ -1,10 +1,14 @@
 package com.example.ecoscout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,7 +23,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUser ;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,24 +32,31 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import android.text.InputType;
+
 public class LoginPage extends AppCompatActivity {
 
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin;
+    private CheckBox showPasswordCheckbox, rememberMeCheckbox;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
     private GoogleSignInClient googleSignInClient;
     private static final int RC_SIGN_IN = 9001; // Request code for Google Sign-In
-
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
 
+        // Initialize UI elements
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
+        showPasswordCheckbox = findViewById(R.id.showPasswordCheckbox);
+        rememberMeCheckbox = findViewById(R.id.rememberMeCheckbox);
+        TextView termsConditionsLink = findViewById(R.id.termsConditionsLink);
 
         // Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
@@ -58,13 +69,15 @@ public class LoginPage extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
-        // Bind UI elements
-        editTextEmail = findViewById(R.id.editTextEmail);
-        editTextPassword = findViewById(R.id.editTextPassword);
-        buttonLogin = findViewById(R.id.buttonLogin);
-        CardView googleSignInButton = findViewById(R.id.googleSignInButton); // Assuming you have this ID in XML
+        // Load saved credentials if "Remember Me" was checked
+        sharedPreferences = getSharedPreferences("User  Prefs", MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("rememberMe", false)) {
+            editTextEmail.setText(sharedPreferences.getString("email", ""));
+            editTextPassword.setText(sharedPreferences.getString("password", ""));
+            rememberMeCheckbox.setChecked(true);
+        }
 
-
+        // Set OnClickListener for the login button
         buttonLogin.setOnClickListener(v -> {
             String email = editTextEmail.getText().toString();
             String password = editTextPassword.getText().toString();
@@ -72,12 +85,30 @@ public class LoginPage extends AppCompatActivity {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(LoginPage.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             } else {
-                loginUser(email, password);
+                loginUser (email, password);
             }
         });
 
-        // Set OnClickListener for Google Sign-In button
-        googleSignInButton.setOnClickListener(v -> signInWithGoogle());
+        // Set OnCheckedChangeListener for the showPasswordCheckbox
+        showPasswordCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                // Show password when the checkbox is checked
+                editTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            } else {
+                // Hide password when the checkbox is unchecked
+                editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+            // Move the cursor to the end of the text
+            editTextPassword.setSelection(editTextPassword.getText().length());
+        });
+
+        // Set OnClickListener for the Terms and Conditions link
+        termsConditionsLink.setOnClickListener(v -> {
+            // Handle the click event for Terms and Conditions
+            // You can start a new activity or show a dialog with the terms
+            Toast.makeText(this, "Terms and Conditions clicked", Toast.LENGTH_SHORT).show();
+            // Example: startActivity(new Intent(this, TermsAndConditionsActivity.class));
+        });
     }
 
     private void loginUser (String email, String password) {
@@ -87,7 +118,7 @@ public class LoginPage extends AppCompatActivity {
                         FirebaseUser  firebaseUser  = mAuth.getCurrentUser ();
                         if (firebaseUser  != null) {
                             String userId = firebaseUser .getUid();
-                            validateUser (userId, firebaseUser ); // Pass firebaseUser  to validateUser
+                            validateUser (userId, firebaseUser , password);
                         }
                     } else {
                         Toast.makeText(LoginPage.this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -95,7 +126,7 @@ public class LoginPage extends AppCompatActivity {
                 });
     }
 
-    private void validateUser (String userId, FirebaseUser  firebaseUser ) {
+    private void validateUser (String userId, FirebaseUser  firebaseUser , String password) {
         DatabaseReference rtdbReference = FirebaseDatabase.getInstance().getReference("Users");
         FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
 
@@ -106,7 +137,7 @@ public class LoginPage extends AppCompatActivity {
                 Log.d("Debug", "Database snapshot: " + snapshot.getValue());
 
                 if (snapshot.exists()) {
-                    Log.d("Debug", "User found: " + snapshot.getValue());
+                    Log.d("Debug", "User  found: " + snapshot.getValue());
                     Toast.makeText(LoginPage.this, "Login successful", Toast.LENGTH_SHORT).show();
 
                     // Add 2 points to the user's points in Realtime Database
@@ -137,21 +168,34 @@ public class LoginPage extends AppCompatActivity {
                     String name = snapshot.child("name").getValue(String.class);
                     String email = snapshot.child("email").getValue(String.class);
                     if (name == null || email == null) {
-                        if (firebaseUser != null) {
-                            name = firebaseUser.getDisplayName();
-                            email = firebaseUser.getEmail();
+                        if (firebaseUser  != null) {
+                            name = firebaseUser .getDisplayName();
+                            email = firebaseUser .getEmail();
                             Log.d("Debug", "Storing name: " + name + " and email: " + email);
                             rtdbReference.child(userId).child("name").setValue(name);
                             rtdbReference.child(userId).child("email").setValue(email);
                         }
                     }
 
+                    // Save credentials if "Remember Me" is checked
+                    if (rememberMeCheckbox.isChecked()) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("rememberMe", true);
+                        editor.putString("email", email);
+                        editor.putString("password", password);
+                        editor.apply();
+                    } else {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.apply();
+                    }
+
                     Intent intent = new Intent(LoginPage.this, Dashboard.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Log.d("Debug", "User ID not found in database: " + userId);
-                    Toast.makeText(LoginPage.this, "User not registered", Toast.LENGTH_SHORT).show();
+                    Log.d("Debug", "User  ID not found in database: " + userId);
+                    Toast.makeText(LoginPage.this, "User  not registered", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 }
             }
@@ -194,7 +238,7 @@ public class LoginPage extends AppCompatActivity {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = mAuth.getCurrentUser();
+                        FirebaseUser  user = mAuth.getCurrentUser ();
                         String userId = user != null ? user.getUid() : null;
                         if (userId != null) {
                             // Here we would add the 2 points logic similar to the previous method
@@ -214,7 +258,7 @@ public class LoginPage extends AppCompatActivity {
                                                             .update("totalPoints", newPoints);
                                                 });
 
-                                        validateUser(userId, user);
+                                        validateUser (userId, user, null); // Pass null for password
                                     });
                         }
                     } else {
@@ -223,5 +267,4 @@ public class LoginPage extends AppCompatActivity {
                     }
                 });
     }
-
 }
