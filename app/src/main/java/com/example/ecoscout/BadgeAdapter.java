@@ -24,6 +24,7 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
 
     private void updateBadgeUnlockStatus() {
         for (Badge badge : badges) {
+            // Only unlock the badge if user has exactly enough or more points
             badge.setUnlocked(currentUserPoints >= badge.getPointsRequired());
         }
     }
@@ -39,7 +40,7 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
     @Override
     public void onBindViewHolder(@NonNull BadgeViewHolder holder, int position) {
         Badge badge = badges.get(position);
-        holder.bind(badge);
+        holder.bind(badge, currentUserPoints);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
             badgeStatus = itemView.findViewById(R.id.badgeStatus);
         }
 
-        void bind(Badge badge) {
+        void bind(Badge badge, int userPoints) {
             badgeIcon.setImageResource(badge.getBadgeIcon());
             badgeName.setText(badge.getName());
             badgePoints.setText(badge.getPointsRequired() + " Points");
@@ -72,6 +73,12 @@ public class BadgeAdapter extends RecyclerView.Adapter<BadgeAdapter.BadgeViewHol
                 badgeStatus.setText("Locked");
                 badgeStatus.setTextColor(Color.RED);
                 itemView.setAlpha(0.5f);
+
+                // Optional: Add progress indicator
+                int pointsRemaining = badge.getPointsRequired() - userPoints;
+                if (pointsRemaining > 0) {
+                    badgePoints.setText(pointsRemaining + " points to unlock");
+                }
             }
         }
     }

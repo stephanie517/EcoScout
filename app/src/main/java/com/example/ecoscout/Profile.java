@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -30,7 +31,7 @@ public class Profile extends AppCompatActivity {
     private Button btnSaveProfile, btnEditProfile;
     private ProfileData profileData;
     private TextView tvTotalPoints, tvEventsJoined;
-    private LinearLayout achievementsContainer; // New addition
+    private LinearLayout achievementsContainer;
 
     // Constants for SharedPreferences
     private static final String PREFS_NAME = "UserProfilePrefs";
@@ -111,23 +112,37 @@ public class Profile extends AppCompatActivity {
                 startActivity(new Intent(Profile.this, Rewards.class));
             }
         });
+
+        displayJoinedEvents();
     }
 
     // Rest of the methods remain the same as in your original code
     private void loadProfileData() {
-        ProfileData profileData = ProfileData.getInstance();
-        // Load data from ProfileData
-        etName.setText(profileData.getName());
-        etEmail.setText(profileData.getEmail());
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Update points display
-        tvTotalPoints.setText("Total Points: " + profileData.getTotalPoints());
+        db.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Load points from Firestore
+                        Long points = documentSnapshot.getLong("totalPoints");
+                        Long eventsJoined = documentSnapshot.getLong("eventsJoined");
 
-        // Update events joined
-        tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
+                        // Update ProfileData and UI
+                        ProfileData profileData = ProfileData.getInstance();
+                        profileData.setTotalPoints(points != null ? points.intValue() : 0);
+                        profileData.setEventsJoined(eventsJoined != null ? eventsJoined.intValue() : 0);
 
-        // Fetch and display user's environmental contributions
-        getLitterReportCount();
+                        // Update UI
+                        etName.setText(profileData.getName());
+                        etEmail.setText(profileData.getEmail());
+                        tvTotalPoints.setText("Total Points: " + profileData.getTotalPoints());
+                        tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load profile data", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void saveProfileData() {
@@ -172,4 +187,46 @@ public class Profile extends AppCompatActivity {
             ProfileData.getInstance().setProfileImagePath(selectedImage.toString());
         }
     }
+
+    private void displayJoinedEvents() {
+        LinearLayout eventsContainer = findViewById(R.id.eventsContainer);
+        eventsContainer.removeAllViews(); // Clear any existing views
+
+        // Fetch events from Firestore (replace with your actual user ID)
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        db.collection("userEvents")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().isEmpty()) {
+                            // No events joined
+                            TextView noEventsText = new TextView(this);
+                            noEventsText.setText("No events attended yet");
+                            noEventsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            eventsContainer.addView(noEventsText);
+                        } else {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Create a view for each event
+                                View eventView = getLayoutInflater().inflate(R.layout.item_joined_event, eventsContainer, false);
+
+                                TextView tvEventName = eventView.findViewById(R.id.tvEventName);
+                                TextView tvEventDate = eventView.findViewById(R.id.tvEventDate);
+                                TextView tvEventLocation = eventView.findViewById(R.id.tvEventLocation);
+
+                                // Set event details from Firestore document
+                                tvEventName.setText(document.getString("eventName"));
+                                tvEventDate.setText(document.getString("eventDate"));
+                                tvEventLocation.setText(document.getString("eventLocation"));
+
+                                eventsContainer.addView(eventView);
+                            }
+                        }
+                    } else {
+                        // Handle error
+                        Toast.makeText(this, "Failed to load events", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
+}

@@ -2,7 +2,6 @@ package com.example.ecoscout;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +15,8 @@ public class Rewards extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rewards);
 
-        // Simulate current user points (replace with actual points tracking)
-        int currentUserPoints = 750;
+        // Get current user points from ProfileData
+        int currentUserPoints = ProfileData.getInstance().getTotalPoints();
 
         // Create list of badges
         List<Badge> badges = createBadgesList();

@@ -9,12 +9,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class EventJoinRequest extends AppCompatActivity {
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_join_request);
+
+        db = FirebaseFirestore.getInstance();
 
         // Bind views
         TextView eventName = findViewById(R.id.joinEventName);
@@ -43,21 +53,50 @@ public class EventJoinRequest extends AppCompatActivity {
 
         // Handle Confirm button click
         confirmButton.setOnClickListener(v -> {
-            String message = optionalMessage.getText().toString().trim();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            // Add points for joining event
+            // Update points in Firestore
+            Map<String, Object> userData = new HashMap<>();
             ProfileData profileData = ProfileData.getInstance();
-            profileData.addPoints(5);
-            profileData.incrementEventsJoined();
+            int currentPoints = profileData.getTotalPoints() + 5;
+            int currentEventsJoined = profileData.getEventsJoined() + 1;
 
-            Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
+            userData.put("totalPoints", currentPoints);
+            userData.put("eventsJoined", currentEventsJoined);
 
-            // TODO: Save event join to database
+            db.collection("users").document(userId)
+                    .set(userData, SetOptions.merge())
+                    .addOnSuccessListener(documentReference -> {
+                        // Update local ProfileData
+                        profileData.setTotalPoints(currentPoints);
+                        profileData.setEventsJoined(currentEventsJoined);
 
-            // Redirect to main page
-            Intent mainIntent = new Intent(EventJoinRequest.this, MainActivity.class);
-            startActivity(mainIntent);
-            finish();
+                        Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
+
+                        // Redirect to main page
+                        Intent mainIntent = new Intent(EventJoinRequest.this, MainActivity.class);
+                        startActivity(mainIntent);
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Failed to update points", Toast.LENGTH_SHORT).show();
+                    });
+
+            // Save event to Firestore (existing code)
+            Map<String, Object> eventData = new HashMap<>();
+            eventData.put("userId", userId);
+            eventData.put("eventName", name);
+            eventData.put("eventDate", date);
+            eventData.put("eventLocation", getString(location));
+
+            db.collection("userEvents")
+                    .add(eventData)
+                    .addOnSuccessListener(documentReference -> {
+                        // Event saved successfully
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Failed to save event", Toast.LENGTH_SHORT).show();
+                    });
         });
 
         // Handle Cancel button click
