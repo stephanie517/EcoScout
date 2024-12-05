@@ -5,6 +5,10 @@ plugins {
 }
 
 buildscript {
+    repositories {
+        google() // Add this if not present
+        mavenCentral()
+    }
     dependencies {
         // Ensure you have this classpath
         classpath ("com.google.gms:google-services:4.3.15")// or the latest version

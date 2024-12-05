@@ -30,6 +30,14 @@
                 android:contentDescription="Profile Image" />
         </androidx.cardview.widget.CardView>
 
+        <Button
+            android:id="@+id/btnUploadPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Photo"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp" />
+
         <!-- Personal Details Section -->
         <TextView
             android:layout_width="match_parent"
@@ -171,5 +179,44 @@
                 android:src="@drawable/baseline_chevron_right_24"
                 android:contentDescription="View Badges"/>
         </LinearLayout>
+
+        <!-- Display Litter Reports Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your Litter Reports"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/litterReportsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:background="@drawable/contribution_background"
+            android:layout_marginBottom="16dp">
+        </LinearLayout>
+
+        <!-- Display Events Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Events Attended"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:id="@+id/eventsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:background="@drawable/contribution_background"
+            android:layout_marginBottom="16dp">
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

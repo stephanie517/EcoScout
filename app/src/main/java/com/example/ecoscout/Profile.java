@@ -1,7 +1,9 @@
 package com.example.ecoscout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,21 +11,45 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.Objects;
+
 public class Profile extends AppCompatActivity {
 
+    private static final int PICK_IMAGE = 1;
     private ImageView profileImage;
+    private Button btnUploadPhoto;
     private EditText etName, etEmail;
     private TextView tvLitterReports;
     private Button btnSaveProfile, btnEditProfile;
     private ProfileData profileData;
     private TextView tvTotalPoints, tvEventsJoined;
     private LinearLayout achievementsContainer; // New addition
+
+    // Constants for SharedPreferences
+    private static final String PREFS_NAME = "UserProfilePrefs";
+    private static final String KEY_PROFILE_IMAGE_URI = "ProfileImageUri";
+
+    // Save photo URI to SharedPreferences
+    private void saveProfileImageUri(String uri) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_PROFILE_IMAGE_URI, uri);
+        editor.apply();
+    }
+
+    // Retrieve photo URI from SharedPreferences
+    private String getProfileImageUri() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_PROFILE_IMAGE_URI, null);
+    }
+
 
     // Firestore instance
     private FirebaseFirestore db;
@@ -38,6 +64,7 @@ public class Profile extends AppCompatActivity {
 
         // Initialize views
         profileImage = findViewById(R.id.profileImage);
+        btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         tvLitterReports = findViewById(R.id.tvLitterReports);
@@ -50,6 +77,10 @@ public class Profile extends AppCompatActivity {
         // Initialize ProfileData using the Singleton instance
         profileData = ProfileData.getInstance();
         loadProfileData();
+
+
+        // Upload Photo Button
+        btnUploadPhoto.setOnClickListener(v -> openGallery());
 
         // Edit Profile Button
         btnEditProfile.setOnClickListener(v -> {
@@ -121,5 +152,24 @@ public class Profile extends AppCompatActivity {
                         Toast.makeText(this, "Failed to load litter reports", Toast.LENGTH_SHORT).show();
                     }
                 });
+        // Fetch Litter Reports and Events
+
     }
-}
+
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            profileImage.setImageURI(selectedImage);
+
+            // Save image URI (for demonstration purposes)
+            ProfileData.getInstance().setProfileImagePath(selectedImage.toString());
+        }
+    }
+    }
