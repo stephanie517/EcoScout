@@ -118,7 +118,7 @@ public class Profile extends AppCompatActivity {
 
     // Rest of the methods remain the same as in your original code
     private void loadProfileData() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String userId = FirebaseAuth.getInstance().getCurrentUser ().getUid();
 
         db.collection("users").document(userId)
                 .get()
@@ -133,9 +133,13 @@ public class Profile extends AppCompatActivity {
                         profileData.setTotalPoints(points != null ? points.intValue() : 0);
                         profileData.setEventsJoined(eventsJoined != null ? eventsJoined.intValue() : 0);
 
+                        // Load name and email
+                        String name = documentSnapshot.getString("name");
+                        String email = documentSnapshot.getString("email");
+
                         // Update UI
-                        etName.setText(profileData.getName());
-                        etEmail.setText(profileData.getEmail());
+                        etName.setText(name != null ? name : "No name available");
+                        etEmail.setText(email != null ? email : "No email available");
                         tvTotalPoints.setText("Total Points: " + profileData.getTotalPoints());
                         tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
                     }
