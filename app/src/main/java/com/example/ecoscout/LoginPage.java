@@ -69,6 +69,12 @@ public class LoginPage extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
+        // Bind UI elements
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        buttonLogin = findViewById(R.id.buttonLogin);
+        CardView googleSignInButton = findViewById(R.id.googleSignInButton);
+
         // Load saved credentials if "Remember Me" was checked
         sharedPreferences = getSharedPreferences("User  Prefs", MODE_PRIVATE);
         if (sharedPreferences.getBoolean("rememberMe", false)) {
@@ -88,6 +94,9 @@ public class LoginPage extends AppCompatActivity {
                 loginUser (email, password);
             }
         });
+
+        // Set OnClickListener for Google Sign-In button
+        googleSignInButton.setOnClickListener(v -> signInWithGoogle());
 
         // Set OnCheckedChangeListener for the showPasswordCheckbox
         showPasswordCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -228,7 +237,7 @@ public class LoginPage extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 Log.w("Google Sign-In", "signInResult:failed code=" + e.getStatusCode());
-                Toast.makeText(this, "Sign-in failed, please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sign-in", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -262,7 +271,7 @@ public class LoginPage extends AppCompatActivity {
                                     });
                         }
                     } else {
-                        Log.w("Google Sign-In", "signInWithCredential:failure", task.getException());
+                        Log.w("Google Sign-In", task.getException());
                         Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
