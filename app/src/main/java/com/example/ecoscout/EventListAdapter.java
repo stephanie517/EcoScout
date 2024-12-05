@@ -29,9 +29,11 @@ public class EventListAdapter extends ArrayAdapter<EventList> {
 
         ImageView listImage = view.findViewById(R.id.listImage);
         TextView listName = view.findViewById(R.id.listName);
+        TextView listDate = view.findViewById(R.id.listDate);
 
         listImage.setImageResource(listData.image);
         listName.setText(listData.name);
+        listDate.setText(listData.date);
 
         return view;
     }
