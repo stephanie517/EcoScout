@@ -9,12 +9,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class EventJoinRequest extends AppCompatActivity {
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_join_request);
+
+        db = FirebaseFirestore.getInstance();
 
         // Bind views
         TextView eventName = findViewById(R.id.joinEventName);
@@ -50,14 +59,27 @@ public class EventJoinRequest extends AppCompatActivity {
             profileData.addPoints(5);
             profileData.incrementEventsJoined();
 
-            Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
+            // Save event to Firestore
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            Map<String, Object> eventData = new HashMap<>();
+            eventData.put("userId", userId);
+            eventData.put("eventName", name);
+            eventData.put("eventDate", date);
+            eventData.put("eventLocation", getString(location));
 
-            // TODO: Save event join to database
+            db.collection("userEvents")
+                    .add(eventData)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
 
-            // Redirect to main page
-            Intent mainIntent = new Intent(EventJoinRequest.this, MainActivity.class);
-            startActivity(mainIntent);
-            finish();
+                        // Redirect to main page
+                        Intent mainIntent = new Intent(EventJoinRequest.this, MainActivity.class);
+                        startActivity(mainIntent);
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Failed to save event", Toast.LENGTH_SHORT).show();
+                    });
         });
 
         // Handle Cancel button click

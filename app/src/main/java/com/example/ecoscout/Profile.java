@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -111,6 +112,8 @@ public class Profile extends AppCompatActivity {
                 startActivity(new Intent(Profile.this, Rewards.class));
             }
         });
+
+        displayJoinedEvents();
     }
 
     // Rest of the methods remain the same as in your original code
@@ -172,4 +175,46 @@ public class Profile extends AppCompatActivity {
             ProfileData.getInstance().setProfileImagePath(selectedImage.toString());
         }
     }
+
+    private void displayJoinedEvents() {
+        LinearLayout eventsContainer = findViewById(R.id.eventsContainer);
+        eventsContainer.removeAllViews(); // Clear any existing views
+
+        // Fetch events from Firestore (replace with your actual user ID)
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        db.collection("userEvents")
+                .whereEqualTo("userId", userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().isEmpty()) {
+                            // No events joined
+                            TextView noEventsText = new TextView(this);
+                            noEventsText.setText("No events attended yet");
+                            noEventsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            eventsContainer.addView(noEventsText);
+                        } else {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Create a view for each event
+                                View eventView = getLayoutInflater().inflate(R.layout.item_joined_event, eventsContainer, false);
+
+                                TextView tvEventName = eventView.findViewById(R.id.tvEventName);
+                                TextView tvEventDate = eventView.findViewById(R.id.tvEventDate);
+                                TextView tvEventLocation = eventView.findViewById(R.id.tvEventLocation);
+
+                                // Set event details from Firestore document
+                                tvEventName.setText(document.getString("eventName"));
+                                tvEventDate.setText(document.getString("eventDate"));
+                                tvEventLocation.setText(document.getString("eventLocation"));
+
+                                eventsContainer.addView(eventView);
+                            }
+                        }
+                    } else {
+                        // Handle error
+                        Toast.makeText(this, "Failed to load events", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
+}
