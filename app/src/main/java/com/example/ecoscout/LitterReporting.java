@@ -11,17 +11,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,7 +46,7 @@ public class LitterReporting extends AppCompatActivity {
 
     private ImageView btnUploadPhoto, imgCapturedPhoto;
     private Button btnSubmitReport, btnSelectLocation, btnSelectLitterType;
-    private TextView tvLocation, tvCategorizationResult; // Added TextView for categorization result
+    private TextView tvLocation, tvCategorizationResult;
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -66,11 +65,12 @@ public class LitterReporting extends AppCompatActivity {
             "Pesticides", "Paints and solvents", "Cleaning agents", "Batteries", "Old computers",
             "Fluorescent light bulbs", "Used syringes", "Expired medications", "Contaminated dressings",
             "Motor oil", "Gasoline", "Aerosol cans", "Fertilizers", "Glue with toxic substances",
-            "Asbestos", "PCB-containing materials", "Radioactive materials", "Fire extinguishers",
+            "Asbestos", "PCB-containing materials",
+            "Radioactive materials", "Fire extinguishers",
             "Pool chemicals", "Refrigerants", "Compressed gas cylinders"
     };
 
-    private String selectedLitterType; // Store the selected litter type
+    private String selectedLitterType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,18 +86,43 @@ public class LitterReporting extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
         }
+
+        // Set up the toolbar
+        Toolbar toolbar = findViewById(R.id.topAppBar);
+        setSupportActionBar(toolbar);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_litter_report, menu);
+        return true;
+    }
 
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Camera permission granted", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show();
-            }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.action_profile) {
+            startActivity(new Intent(this, Profile.class));
+            return true;
+        } else if (itemId == R.id.action_view_map) {
+            startActivity(new Intent(this, ViewMapActivity.class));
+            return true;
+        } else if (itemId == R.id.action_cleanup_events) {
+            startActivity(new Intent(this, Event.class));
+            return true;
+        } else if (itemId == R.id.action_leaderboard) {
+            startActivity(new Intent(this, Leaderboard.class));
+            return true;
+        } else if (itemId == R.id.action_resources) {
+            startActivity(new Intent(this, TutorialsActivity.class));
+            return true;
+        } else if (itemId == R.id.action_sign_out) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
@@ -111,7 +136,7 @@ public class LitterReporting extends AppCompatActivity {
         btnUploadPhoto = findViewById(R.id.btnUploadPhoto);
         btnSubmitReport = findViewById(R.id.btnSubmitReport);
         btnSelectLocation = findViewById(R.id.btnSelectLocation);
-        btnSelectLitterType = findViewById(R.id.btnSelectLitterType); // Initialize the button
+        btnSelectLitterType = findViewById(R.id.btnSelectLitterType);
         imgCapturedPhoto = findViewById(R.id.imgCapturedPhoto);
         tvLocation = findViewById(R.id.tvLocation);
         tvCategorizationResult = findViewById(R.id.tvCategorizationResult);
@@ -120,7 +145,7 @@ public class LitterReporting extends AppCompatActivity {
     private void setupListeners() {
         btnUploadPhoto.setOnClickListener(v -> showUploadOptions());
         btnSelectLocation.setOnClickListener(v -> openMapActivity());
-        btnSelectLitterType.setOnClickListener(v -> showLitterTypeDialog()); // Show dialog on button click
+        btnSelectLitterType.setOnClickListener(v -> showLitterTypeDialog());
         btnSubmitReport.setOnClickListener(v -> submitLitterReport());
     }
 
@@ -129,20 +154,18 @@ public class LitterReporting extends AppCompatActivity {
         builder.setTitle("Select Litter Type");
 
         builder.setItems(LITTER_TYPES, (dialog, which) -> {
-            selectedLitterType = LITTER_TYPES[which]; // Store the selected litter type
+            selectedLitterType = LITTER_TYPES[which];
             Log.d("LitterReporting", "Selected Litter Type: " + selectedLitterType);
 
-            // Get points and update the categorization result
             int points = categorizeLitterAndGetPoints(selectedLitterType);
             Log.d("LitterReporting", "Points: " + points);
 
-            // Update the TextView with the categorization result
             if (points == 20) {
                 tvCategorizationResult.setText("Selected litter type is hazardous.");
             } else {
                 tvCategorizationResult.setText("Selected litter type is standard.");
             }
-            tvCategorizationResult.setVisibility(View.VISIBLE); // Make it visible
+            tvCategorizationResult.setVisibility(View.VISIBLE);
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -198,7 +221,7 @@ public class LitterReporting extends AppCompatActivity {
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_upload, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
-        bottomSheetView.findViewById(R.id .btnTakePhoto).setOnClickListener(v -> {
+        bottomSheetView.findViewById(R.id.btnTakePhoto).setOnClickListener(v -> {
             Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
             bottomSheetDialog.dismiss();
@@ -208,7 +231,7 @@ public class LitterReporting extends AppCompatActivity {
             Intent uploadPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
             uploadPhotoIntent.setType("image/*");
             startActivityForResult(uploadPhotoIntent, GALLERY_REQUEST_CODE);
-            bottomSheetDialog.dismiss();
+            bottomSheetDialog .dismiss();
         });
 
         bottomSheetDialog.show();
@@ -312,7 +335,8 @@ public class LitterReporting extends AppCompatActivity {
 
     private int categorizeLitterAndGetPoints(String litterType) {
         String[] hazardousWaste = {
-                "Pesticides", "Paints and solvents", "Cleaning agents", "Batteries", "Old computers",
+                "Pesticides", "Paints and solvents",
+                "Cleaning agents", "Batteries", "Old computers",
                 "Fluorescent light bulbs", "Used syringes", "Expired medications", "Contaminated dressings",
                 "Motor oil", "Gasoline", "Aerosol cans", "Fertilizers", "Glue with toxic substances",
                 "Asbestos", "PCB-containing materials", "Radioactive materials", "Fire extinguishers",
@@ -381,7 +405,7 @@ public class LitterReporting extends AppCompatActivity {
         private double longitude;
         private String imageUrl;
         private long timestamp;
-        private int points; // New field for points
+        private int points;
 
         public LitterReport(String userId, String litterType, double latitude,
                             double longitude, String imageUrl, int points) {
@@ -391,7 +415,7 @@ public class LitterReporting extends AppCompatActivity {
             this.longitude = longitude;
             this.imageUrl = imageUrl;
             this.timestamp = System.currentTimeMillis();
-            this.points = points; // Initialize points
+            this.points = points;
         }
 
         // Getters and setters

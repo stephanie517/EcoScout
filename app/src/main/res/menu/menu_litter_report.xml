@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile" />
+    <item
+        android:id="@+id/action_view_map"
+        android:title="View Map"
+        android:icon="@drawable/ic_map" />
+    <item
+        android:id="@+id/action_cleanup_events"
+        android:title="Clean Up Events"
+        android:icon="@drawable/ic_event1" />
+    <item
+        android:id="@+id/action_leaderboard"
+        android:title="Leaderboard"
+        android:icon="@drawable/ic_leaderboard" />
+    <item
+        android:id="@+id/action_resources"
+        android:title="Resources"
+        android:icon="@drawable/ic_resources" />
+    <item
+        android:id="@+id/action_sign_out"
+        android:title="Sign Out"
+        android:icon="@drawable/ic_sign_out" />
+</menu>
