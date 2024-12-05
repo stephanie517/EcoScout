@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="ECO CHAMPS\n Your Impact, Ranked!"
         android:textSize="20sp"
-        android:textColor="@color/lavender"
+        android:textColor="@color/accent_green"
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_marginBottom="20dp"
