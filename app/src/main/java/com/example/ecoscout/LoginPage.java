@@ -58,6 +58,13 @@ public class LoginPage extends AppCompatActivity {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
+        // Back Button functionality to navigate to MainActivity
+        findViewById(R.id.backButton).setOnClickListener(v -> {
+            Intent intent = new Intent(LoginPage.this, MainActivity.class);  // Navigate to MainActivity
+            startActivity(intent);
+            finish();  // Optional: If you want to close LoginPage after navigating
+        });
+
         // Bind UI elements
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
