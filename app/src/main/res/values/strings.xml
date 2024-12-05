@@ -58,4 +58,48 @@
 \nSurf lessons will be offered at a discount for volunteers after the cleanup.</string>
     <string name="default_web_client_id">150271275690-6rbvnilj4hgm54i36um8qnatsvm2tvab.apps.googleusercontent.com</string>
 
+    //crc (Coral Reef Cleanup)
+    <string name="crcLocation">Apo Island
+\nDauin
+\nNegros Oriental</string>
+    <string name="crcDesc">Divers and snorkelers are invited to join this underwater cleanup event aimed at removing trash from the coral reef area.
+\nThis event is part of World Oceans Day celebrations.
+\nParticipants will receive free environmental conservation workshops.</string>
+
+    //plc (Plaza Cleanup Drive)
+    <string name="pcdLocation">Rizal Park
+\nManila
+\nPhilippines</string>
+    <string name="pcdDesc">Volunteers will assist in cleaning litter and maintaining flowerbeds in one of the most historic parks in the Philippines.
+\nA short heritage tour of Rizal Park will follow the cleanup activity.</string>
+
+    //iwc (Island-wide Cleanup)
+    <string name="iwcLocation">Bantayan Island
+\nCebu
+\nCentral Visayas</string>
+    <string name="iwcDesc">A community-led effort to clean beaches, roadsides, and public areas on Bantayan Island.
+\nLocal food and cultural performances will be provided as a token of appreciation for volunteers.</string>
+
+    //llc (Lake Cleanup)
+    <string name="lctlLocation">Taal Lake
+\nBatangas
+\nCalabarzon</string>
+    <string name="lctlDesc">Help clean up Taal Lake and its surrounding areas while learning about the ecosystem of this critical water body.
+\nIncludes an eco-tour of nearby fishing villages.</string>
+
+    //esc (Estero Cleanup)
+    <string name="ecbLocation">Estero de Binondo
+\nBinondo
+\nManila</string>
+    <string name="ecbDesc">This cleanup focuses on one of Manila\'s historic waterways.
+\nVolunteers will work on removing debris and water hyacinths clogging the estero.
+\nThe event includes a discussion on urban waterway management.</string>
+
+    //hlc (Highland Cleanup)
+    <string name="hcsLocation">Sagada
+\nMountain Province
+\nCordillera Region</string>
+    <string name="hcsDesc">A cleanup initiative targeting the scenic mountain trails and local villages of Sagada.
+\nParticipants will also get a chance to visit famous attractions such as the Hanging Coffins and Echo Valley.</string>
+
 </resources>
