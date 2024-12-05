@@ -1,25 +1,34 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginBottom="8dp">
 
+    <!-- Image for Litter Photo -->
     <ImageView
         android:id="@+id/ivLitterPhoto"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
+        android:contentDescription="@string/litter_photo_desc"
+        android:background="@android:color/darker_gray"
         android:layout_marginBottom="8dp" />
 
+    <!-- Text for Litter Type -->
     <TextView
         android:id="@+id/tvLitterType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Litter Type"
         android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:layout_marginBottom="4dp" />
 
+    <!-- Text for Location -->
     <TextView
         android:id="@+id/tvLitterLocation"
         android:layout_width="match_parent"

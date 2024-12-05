@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser ;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -37,10 +37,10 @@ public class Profile extends AppCompatActivity {
     private LinearLayout achievementsContainer, litterReportsContainer;
     private List<LitterReport> userLitterReports;
     private SharedPreferences sharedPreferences;
-    private FirebaseUser  currentUser ;
+    private FirebaseUser currentUser;
 
     // Constants for SharedPreferences
-    private static final String PREFS_NAME = "User ProfilePrefs";
+    private static final String PREFS_NAME = "UserProfilePrefs";
     private static final String KEY_PROFILE_IMAGE_URI = "ProfileImageUri";
 
     // Firestore instance
@@ -53,7 +53,7 @@ public class Profile extends AppCompatActivity {
 
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
-        currentUser  = FirebaseAuth.getInstance().getCurrentUser ();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Initialize views
         profileImage = findViewById(R.id.profileImage);
@@ -98,8 +98,11 @@ public class Profile extends AppCompatActivity {
             Toast.makeText(this, "Image upload coming soon!", Toast.LENGTH_SHORT).show();
         });
 
-        achievementsContainer.setOnClickListener(v -> {
-            startActivity(new Intent(Profile.this, Rewards.class));
+        achievementsContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Profile.this, Rewards.class));
+            }
         });
 
         displayJoinedEvents();
@@ -122,7 +125,7 @@ public class Profile extends AppCompatActivity {
     }
 
     private void loadProfileData() {
-        String userId = currentUser .getUid();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         db.collection("users").document(userId)
                 .get()
@@ -139,11 +142,12 @@ public class Profile extends AppCompatActivity {
                         Long eventsJoined = documentSnapshot.getLong("eventsJoined");
 
                         // Update ProfileData and UI
+                        ProfileData profileData = ProfileData.getInstance();
                         profileData.setTotalPoints(points);
                         profileData.setEventsJoined(eventsJoined != null ? eventsJoined.intValue() : 0);
 
                         // Load name and email
-                        String name = documentSnapshot.getString("fullName");
+                        String name = documentSnapshot.getString("name");
                         String email = documentSnapshot.getString("email");
 
                         // Update UI
@@ -169,10 +173,10 @@ public class Profile extends AppCompatActivity {
         profileData.setEmail(etEmail.getText().toString());
 
         // Update Firestore with new profile data
-        String userId = currentUser .getUid();
+        String userId = currentUser.getUid();
         db.collection("users").document(userId)
                 .update(
-                        "fullName", etName.getText().toString(),
+                        "name", etName.getText().toString(),
                         "email", etEmail.getText().toString()
                 )
                 .addOnSuccessListener(aVoid -> {
@@ -205,7 +209,8 @@ public class Profile extends AppCompatActivity {
         LinearLayout eventsContainer = findViewById(R.id.eventsContainer);
         eventsContainer.removeAllViews(); // Clear any existing views
 
-        String userId = currentUser .getUid();
+        // Fetch events from Firestore (replace with your actual user ID)
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         db.collection("userEvents")
                 .whereEqualTo("userId", userId)
@@ -213,18 +218,21 @@ public class Profile extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().isEmpty()) {
+                            // No events joined
                             TextView noEventsText = new TextView(this);
                             noEventsText.setText("No events attended yet");
                             noEventsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                             eventsContainer.addView(noEventsText);
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Create a view for each event
                                 View eventView = getLayoutInflater().inflate(R.layout.item_joined_event, eventsContainer, false);
 
                                 TextView tvEventName = eventView.findViewById(R.id.tvEventName);
                                 TextView tvEventDate = eventView.findViewById(R.id.tvEventDate);
                                 TextView tvEventLocation = eventView.findViewById(R.id.tvEventLocation);
 
+                                // Set event details from Firestore document
                                 tvEventName.setText(document.getString("eventName"));
                                 tvEventDate.setText(document.getString("eventDate"));
                                 tvEventLocation.setText(document.getString("eventLocation"));
@@ -233,6 +241,7 @@ public class Profile extends AppCompatActivity {
                             }
                         }
                     } else {
+                        // Handle error
                         Toast.makeText(this, "Failed to load events", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -242,45 +251,56 @@ public class Profile extends AppCompatActivity {
         LinearLayout litterReportsContainer = findViewById(R.id.litterReportsContainer);
         litterReportsContainer.removeAllViews(); // Clear any existing views
 
-        String userId = currentUser .getUid();
+        // Fetch litter reports from Firestore based on the current user
+        String userId = currentUser.getUid();
 
         db.collection("users").document(userId)
-                .collection("litterReports")
+                .collection("litterReports")  // Updated collection path
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().isEmpty()) {
+                            // No litter reports yet
                             TextView noReportsText = new TextView(this);
                             noReportsText.setText("No litter reports yet");
                             noReportsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                             litterReportsContainer.addView(noReportsText);
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Inflate the layout for each litter report
                                 View litterReportView = getLayoutInflater().inflate(R.layout.item_litter_report, litterReportsContainer, false);
 
                                 ImageView ivLitterPhoto = litterReportView.findViewById(R.id.ivLitterPhoto);
                                 TextView tvLitterType = litterReportView.findViewById(R.id.tvLitterType);
                                 TextView tvLitterLocation = litterReportView.findViewById(R.id.tvLitterLocation);
 
+                                // Get the litter report details from Firestore document
                                 String photoUrl = document.getString("imageUrl");
                                 String litterType = document.getString("litterType");
                                 Double latitude = document.getDouble("latitude");
                                 Double longitude = document.getDouble("longitude");
-                                Integer points = document.getLong("points") != null ? document.getLong("points").intValue() : 0;
+                                Integer points = document.getLong("points") != null
+                                        ? document.getLong("points").intValue()
+                                        : 0;
 
+                                // Set the photo if available
                                 if (photoUrl != null && !photoUrl.isEmpty()) {
                                     Glide.with(this).load(photoUrl).into(ivLitterPhoto);
                                 }
 
+                                // Set the litter type and location text
                                 tvLitterType.setText("Type: " + litterType + " (Points: " + points + ")");
                                 tvLitterLocation.setText(String.format("Location: %.4f, %.4f", latitude, longitude));
 
+                                // Add the view to the container
                                 litterReportsContainer.addView(litterReportView);
                             }
                         }
                     } else {
+                        // Handle error
                         Toast.makeText(this, "Failed to load litter reports", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
 }
