@@ -3,22 +3,22 @@ package com.example.ecoscout;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class EventJoinRequest extends AppCompatActivity {
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class EventJoinRequest extends AppCompatActivity {
         setContentView(R.layout.event_join_request);
 
         db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         // Bind views
         TextView eventName = findViewById(R.id.joinEventName);
@@ -53,38 +54,35 @@ public class EventJoinRequest extends AppCompatActivity {
 
         // Handle Confirm button click
         confirmButton.setOnClickListener(v -> {
-            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            ProfileData profileData = ProfileData.getInstance();
+            String userId = mAuth.getCurrentUser().getUid();
 
-            // First get current points from Firestore
+            // First get current points and events joined from Firestore
             db.collection("users").document(userId)
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        // Get current points and log them
+                        // Get current points
                         Long currentPoints = documentSnapshot.getLong("totalPoints");
+                        Long currentEventsJoined = documentSnapshot.getLong("eventsJoined");
+
                         int points = (currentPoints != null) ? currentPoints.intValue() : 0;
-                        Log.d("EventPoints", "Current points before adding: " + points);
+                        int eventsJoined = (currentEventsJoined != null) ? currentEventsJoined.intValue() : 0;
 
                         // Add 5 points for joining event
                         int newPoints = points + 5;
-                        Log.d("EventPoints", "New points after adding 5: " + newPoints);
+                        int newEventsJoined = eventsJoined + 1;
 
-                        // Update Firestore with new total
+                        // Update both Firestore and Realtime Database
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("totalPoints", newPoints);
-                        userData.put("eventsJoined", profileData.getEventsJoined() + 1);
+                        userData.put("eventsJoined", newEventsJoined);
 
+                        // Update Firestore
                         db.collection("users").document(userId)
-                                .update(userData)  // Changed from set() to update()
+                                .update(userData)
                                 .addOnSuccessListener(aVoid -> {
-                                    // Log successful update
-                                    Log.d("EventPoints", "Successfully updated points in Firestore to: " + newPoints);
-
-                                    // Update local ProfileData
-                                    profileData.setTotalPoints(newPoints);
-                                    profileData.setEventsJoined(profileData.getEventsJoined() + 1);
-
-                                    Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
+                                    // Also update Realtime Database
+                                    DatabaseReference rtdb = FirebaseDatabase.getInstance().getReference("Users");
+                                    rtdb.child(userId).child("points").setValue(newPoints);
 
                                     // Save event details
                                     Map<String, Object> eventData = new HashMap<>();
@@ -96,25 +94,33 @@ public class EventJoinRequest extends AppCompatActivity {
                                     db.collection("userEvents")
                                             .add(eventData)
                                             .addOnSuccessListener(documentReference -> {
-                                                Log.d("EventPoints", "Event saved successfully");
-                                                // Redirect to main page
-                                                Intent mainIntent = new Intent(EventJoinRequest.this, MainActivity.class);
-                                                startActivity(mainIntent);
+                                                Toast.makeText(EventJoinRequest.this,
+                                                        "Event joined successfully! +5 points",
+                                                        Toast.LENGTH_LONG).show();
+
+                                                // Instead of going to MainActivity, go to Profile
+                                                Intent profileIntent = new Intent(EventJoinRequest.this, Profile.class);
+                                                profileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                startActivity(profileIntent);
                                                 finish();
                                             })
                                             .addOnFailureListener(e -> {
-                                                Log.e("EventPoints", "Failed to save event", e);
-                                                Toast.makeText(this, "Failed to save event", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(EventJoinRequest.this,
+                                                        "Failed to save event",
+                                                        Toast.LENGTH_SHORT).show();
                                             });
                                 })
                                 .addOnFailureListener(e -> {
-                                    Log.e("EventPoints", "Failed to update points", e);
-                                    Toast.makeText(this, "Failed to update points", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(EventJoinRequest.this,
+                                            "Failed to update points",
+                                            Toast.LENGTH_SHORT).show();
                                 });
                     })
                     .addOnFailureListener(e -> {
-                        Log.e("EventPoints", "Failed to get current points", e);
-                        Toast.makeText(this, "Failed to get current points", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EventJoinRequest.this,
+                                "Failed to get current points",
+                                Toast.LENGTH_SHORT).show();
                     });
         });
 
@@ -122,3 +128,4 @@ public class EventJoinRequest extends AppCompatActivity {
         cancelButton.setOnClickListener(v -> finish());
     }
 }
+
