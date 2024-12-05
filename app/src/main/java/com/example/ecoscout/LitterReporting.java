@@ -78,12 +78,23 @@ public class LitterReporting extends AppCompatActivity {
             "Styrofoam containers", "Single-use cutlery", "Straws and stirrers", "Torn clothing",
             "Takeout containers", "Disposable coffee cups", "Plastic bottle caps", "Balloons",
             "Vehicle tires", "Snack wrappers", "Pens and markers", "Old keys or locks",
-            "Pesticides", "Paints and solvents", "Cleaning agents", "Batteries", "Old computers",
-            "Fluorescent light bulbs", "Used syringes", "Expired medications", "Contaminated dressings",
-            "Motor oil", "Gasoline", "Aerosol cans", "Fertilizers", "Glue with toxic substances",
-            "Asbestos", "PCB-containing materials", "Radioactive materials", "Fire extinguishers",
-            "Pool chemicals", "Refrigerants", "Compressed gas cylinders"
+            "Plastic utensils", "Paper napkins", "Tissues", "Milk cartons", "Candy wrappers",
+            "Construction debris", "Rubber bands", "Plastic zip ties", "Broken ceramics",
+            "Rubber gloves", "Masks (face masks)", "Fishing lines", "Foam packing material",
+            "Disposable razors", "Wet wipes", "Plastic rings from six-packs", "Broken toys",
+            "Garden waste", "Fruit peels", "Old shoes", "Deflated balls", "Metal wires",
+            "Used napkins", "Tangled cables", "Discarded books", "Plastic beads",
+            "Electronic parts", "Shattered mirrors", "Pet waste bags", "Soap wrappers",
+            "Plastic food packaging", "Ice cream sticks", "Old magazines", "Torn umbrellas",
+            "Disposable chopsticks", "Snack boxes", "Earbuds or headphones", "Broken glassware",
+            "Old furniture pieces", "Empty toothpaste tubes", "Discarded batteries", "Plastic trays",
+            "Packing peanuts", "Plastic wrap", "Damaged handbags", "Old belts",
+            "Bottle seals", "Aluminum trays", "Coffee pod capsules", "Damaged power cords",
+            "Ripped tarps", "Faded posters", "Kite strings", "Disposable thermometers",
+            "Popcorn bags", "Plastic egg cartons", "Disused paper plates"
     };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -418,13 +429,25 @@ public class LitterReporting extends AppCompatActivity {
 
     private int categorizeLitterAndGetPoints(String litterType) {
         String[] hazardousWaste = {
-                "Pesticides", "Paints and solvents",
-                "Cleaning agents", "Batteries", "Old computers",
+                "Pesticides", "Paints and solvents", "Cleaning agents", "Batteries", "Old computers",
                 "Fluorescent light bulbs", "Used syringes", "Expired medications", "Contaminated dressings",
                 "Motor oil", "Gasoline", "Aerosol cans", "Fertilizers", "Glue with toxic substances",
                 "Asbestos", "PCB-containing materials", "Radioactive materials", "Fire extinguishers",
-                "Pool chemicals", "Refrigerants", "Compressed gas cylinders"
+                "Pool chemicals", "Refrigerants", "Compressed gas cylinders", "Mercury thermometers",
+                "Car batteries", "Brake fluids", "Old mobile phones", "Printer ink cartridges",
+                "Chemical lab waste", "Photographic chemicals", "Antifreeze", "Herbicides",
+                "Insecticides", "Industrial adhesives", "Lead-based paints", "Toxic cleaning wipes",
+                "Sharp blades", "Acids (e.g., sulfuric acid)", "Alkalis (e.g., lye)", "Used motor oils",
+                "Medical sharps", "Lab reagents", "Dry cleaning chemicals", "Fuel additives",
+                "Ink and toner cartridges", "E-waste (e.g., cables, old routers)", "Light ballasts",
+                "Transmission fluids", "Used brake pads", "Gas cylinders (propane or butane)",
+                "Coolant fluids", "Refrigerant oils", "Explosives (e.g., fireworks)", "Bleach products",
+                "Corrosive cleaners", "Contaminated oil rags", "Discarded x-ray plates", "Heavy metals",
+                "Old smoke detectors", "Medical diagnostic devices", "Cement residues", "PCB oils",
+                "Old pesticide containers", "Lawn treatment chemicals", "Expired cleaning sprays",
+                "Wood varnishes", "Sanding dust with toxins", "Fumigation chemicals", "Lead pipes"
         };
+
 
         for (String hazardous : hazardousWaste) {
             if (litterType.equals(hazardous)) {
