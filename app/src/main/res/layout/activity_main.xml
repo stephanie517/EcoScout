@@ -38,7 +38,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="160dp"
+        android:layout_marginBottom="180dp"
         android:background="@android:color/transparent"
         app:cardBackgroundColor="#B3FFFFFF"
         app:cardCornerRadius="24dp"
