@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser ;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.database.DatabaseReference;
 
 import java.io.IOException;
 import java.util.List;
@@ -52,6 +53,9 @@ public class LitterReporting extends AppCompatActivity {
     private FirebaseAuth auth;
     private FusedLocationProviderClient fusedLocationClient;
 
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private DatabaseReference databaseReference;
+    private StorageReference storageReference;
     private Uri imageUri;
     private Location litterLocation;
 

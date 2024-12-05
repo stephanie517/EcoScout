@@ -12,13 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.content.SharedPreferences;
+import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Profile extends AppCompatActivity {
@@ -31,7 +35,10 @@ public class Profile extends AppCompatActivity {
     private Button btnSaveProfile, btnEditProfile;
     private ProfileData profileData;
     private TextView tvTotalPoints, tvEventsJoined;
-    private LinearLayout achievementsContainer;
+    private LinearLayout achievementsContainer, litterReportsContainer;
+    private List<LitterReport> userLitterReports;
+    private SharedPreferences sharedPreferences;
+    private FirebaseUser currentUser;
 
     // Constants for SharedPreferences
     private static final String PREFS_NAME = "UserProfilePrefs";
@@ -50,8 +57,7 @@ public class Profile extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         return sharedPreferences.getString(KEY_PROFILE_IMAGE_URI, null);
     }
-
-
+    ;
     // Firestore instance
     private FirebaseFirestore db;
 
@@ -60,8 +66,11 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
 
+            litterReportsContainer = findViewById(R.id.litterReportsContainer); // Your LinearLayout in profile.xml
+
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         // Initialize views
         profileImage = findViewById(R.id.profileImage);
@@ -74,6 +83,8 @@ public class Profile extends AppCompatActivity {
         tvTotalPoints = findViewById(R.id.tvTotalPoints);
         tvEventsJoined = findViewById(R.id.tvEventsJoined);
         achievementsContainer = findViewById(R.id.achievementsContainer);
+        litterReportsContainer = findViewById(R.id.litterReportsContainer);
+
 
         // Initialize ProfileData using the Singleton instance
         profileData = ProfileData.getInstance();
@@ -114,6 +125,9 @@ public class Profile extends AppCompatActivity {
         });
 
         displayJoinedEvents();
+        // Show Litter Reports
+        displayLitterReports();
+
     }
 
     // Rest of the methods remain the same as in your original code
@@ -229,4 +243,54 @@ public class Profile extends AppCompatActivity {
                     }
                 });
     }
-}
+    private void displayLitterReports() {
+        LinearLayout litterReportsContainer = findViewById(R.id.litterReportsContainer);
+        litterReportsContainer.removeAllViews(); // Clear any existing views
+
+        // Fetch litter reports from Firestore based on the current user
+        String userId = currentUser.getUid();
+
+        db.collection("litterReports")
+                .whereEqualTo("userId", userId) // Assuming "userId" is stored in each litter report
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().isEmpty()) {
+                            // No litter reports yet
+                            TextView noReportsText = new TextView(this);
+                            noReportsText.setText("No litter reports yet");
+                            noReportsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            litterReportsContainer.addView(noReportsText);
+                        } else {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Inflate the layout for each litter report
+                                View litterReportView = getLayoutInflater().inflate(R.layout.item_litter_report, litterReportsContainer, false);
+
+                                ImageView ivLitterPhoto = litterReportView.findViewById(R.id.ivLitterPhoto);
+                                TextView tvLitterType = litterReportView.findViewById(R.id.tvLitterType);
+                                TextView tvLitterLocation = litterReportView.findViewById(R.id.tvLitterLocation);
+
+                                // Get the litter report details from Firestore document
+                                String photoUrl = document.getString("photoUrl"); // Assuming the photo URL is stored in this field
+                                String litterType = document.getString("litterType");
+                                String litterLocation = document.getString("litterLocation");
+
+                                // Set the photo if available
+                                if (photoUrl != null && !photoUrl.isEmpty()) {
+                                    Glide.with(this).load(photoUrl).into(ivLitterPhoto);
+                                }
+
+                                // Set the litter type and location text
+                                tvLitterType.setText(litterType);
+                                tvLitterLocation.setText(litterLocation);
+
+                                // Add the view to the container
+                                litterReportsContainer.addView(litterReportView);
+                            }
+                        }
+                    } else {
+                        // Handle error
+                        Toast.makeText(this, "Failed to load litter reports", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }}
