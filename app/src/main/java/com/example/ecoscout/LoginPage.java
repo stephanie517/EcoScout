@@ -10,10 +10,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.AlertDialog;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -70,7 +70,7 @@ public class LoginPage extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         // Load saved credentials if "Remember Me" was checked
-        sharedPreferences = getSharedPreferences("User   Prefs", MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("User  Prefs", MODE_PRIVATE);
         if (sharedPreferences.getBoolean("rememberMe", false)) {
             editTextEmail.setText(sharedPreferences.getString("email", ""));
             editTextPassword.setText(sharedPreferences.getString("password", ""));
@@ -85,20 +85,14 @@ public class LoginPage extends AppCompatActivity {
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(LoginPage.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             } else {
-                // Check if the user has agreed to the Terms and Conditions
-                if (!sharedPreferences.getBoolean("termsAgreed", false)) {
-                    showTermsAndConditionsDialog(email, password);
-                } else {
-                    loginUser (email, password);
-                }
+                loginUser (email, password);
             }
         });
 
         // Set OnCheckedChangeListener for the showPasswordCheckbox
         showPasswordCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
-                // Show password when ```java
-// Show password when the checkbox is checked
+                // Show password when the checkbox is checked
                 editTextPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             } else {
                 // Hide password when the checkbox is unchecked
@@ -110,38 +104,18 @@ public class LoginPage extends AppCompatActivity {
 
         // Set OnClickListener for the Terms and Conditions link
         termsConditionsLink.setOnClickListener(v -> {
-            showTermsAndConditionsDialog("", "");
+            // Handle the click event for Terms and Conditions
+            // You can start a new activity or show a dialog with the terms
+            Toast.makeText(this, "Terms and Conditions clicked", Toast.LENGTH_SHORT).show();
+            // Example: startActivity(new Intent(this, TermsAndConditionsActivity.class));
         });
     }
 
-    private void showTermsAndConditionsDialog(String email, String password) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Terms and Conditions")
-                .setMessage("By using this application, you agree to the following terms regarding litter reporting:\n\n" +
-                        "1. You are encouraged to report any instances of littering you observe in your community.\n" +
-                        "2. All reports should be made truthfully and accurately to ensure the integrity of the data collected.\n" +
-                        "3. You understand that false reporting may lead to consequences as per the application's policies.\n" +
-                        "4. Your contributions will help in maintaining a cleaner environment and promoting awareness about littering.\n\n" +
-                        "Please read and agree to the Terms and Conditions to proceed.")
-                .setPositiveButton("Agree", (dialog, which) -> {
-                    // Update the flag in SharedPreferences
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("termsAgreed", true);
-                    editor.apply();
-
-                    // Proceed with login
-                    loginUser(email, password);
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .setCancelable(false)
-                .show();
-    }
-
-    private void loginUser(String email, String password) {
+    private void loginUser (String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser  firebaseUser  = mAuth.getCurrentUser();
+                        FirebaseUser  firebaseUser  = mAuth.getCurrentUser ();
                         if (firebaseUser  != null) {
                             String userId = firebaseUser .getUid();
                             validateUser (userId, firebaseUser , password);
@@ -264,7 +238,7 @@ public class LoginPage extends AppCompatActivity {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser  user = mAuth.getCurrentUser();
+                        FirebaseUser  user = mAuth.getCurrentUser ();
                         String userId = user != null ? user.getUid() : null;
                         if (userId != null) {
                             // Here we would add the 2 points logic similar to the previous method
