@@ -56,5 +56,5 @@ dependencies {
     implementation ("com.google.firebase:firebase-storage:21.0.1")
     implementation ("com.google.firebase:firebase-firestore:24.0.0")
     implementation ("com.google.android.gms:play-services-location:18.0.0")
-    implementation ("com.google.android.gms:play-services-maps:18.1.0")// Check for the latest version
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
 }
