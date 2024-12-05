@@ -4,220 +4,230 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background_color"
-    tools:context=".ProfileData">
+    android:background="@color/white"
+    tools:context=".Profile">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <!-- Profile Image Section -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="60dp">
-
-            <ImageView
-                android:id="@+id/profileImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/profile1"
-                android:contentDescription="Profile Image" />
-        </androidx.cardview.widget.CardView>
-
-        <Button
-            android:id="@+id/btnUploadPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload Photo"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Personal Details Section -->
-        <TextView
+        <!-- Header Section with Profile Image -->
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Personal Details"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_height="230dp"
+            android:background="@color/primary_green">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            <androidx.cardview.widget.CardView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="4dp">
 
-            <EditText
-                android:id="@+id/etName"
-                android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="Profile Image"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile1" />
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/btnUploadPhoto"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Full Name"
-                android:inputType="textPersonName"
-                android:enabled="false"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:text="Change Photo"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_marginBottom="22dp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/primary_green"/>
+        </FrameLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-            <EditText
-                android:id="@+id/etEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email Address"
-                android:inputType="textEmailAddress"
-                android:enabled="false"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Action Buttons -->
+        <!-- Content Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <Button
-                android:id="@+id/btnEditProfile"
-                android:layout_width="0dp"
+            <!-- Stats Cards -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Edit Profile"
-                android:layout_marginEnd="8dp"/>
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
 
-            <Button
-                android:id="@+id/btnSaveProfile"
-                android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tvTotalPoints"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Total Points: 0"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/tvLitterReports"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Litter Reports: 0"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/tvEventsJoined"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Events: 0"
+                    android:textAlignment="center"/>
+            </LinearLayout>
+
+            <!-- Personal Details Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Save"
-                android:visibility="gone"/>
-        </LinearLayout>
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp">
 
-        <!-- Environmental Contributions Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Environmental Contributions"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-        <!-- Add this after the "Environmental Contributions" TextView -->
-        <TextView
-            android:id="@+id/tvTotalPoints"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Total Points: 0"
-            android:drawableStart="@drawable/baseline_stars_24"
-            android:drawablePadding="8dp"
-            android:padding="8dp"
-            android:background="@drawable/contribution_background"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Personal Details"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_green"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:id="@+id/tvLitterReports"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Litter Reports: 0"
-            android:drawableStart="@drawable/ic_report"
-            android:drawablePadding="8dp"
-            android:padding="8dp"
-            android:background="@drawable/contribution_background"/>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        app:boxStrokeColor="@color/primary_green"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-        <TextView
-            android:id="@+id/tvEventsJoined"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Events Attended: 0"
-            android:drawableStart="@drawable/ic_event"
-            android:drawablePadding="8dp"
-            android:padding="8dp"
-            android:background="@drawable/contribution_background"/>
+                        <EditText
+                            android:id="@+id/etName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Full Name"
+                            android:inputType="textPersonName"
+                            android:enabled="false"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Achievements Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Achievements"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp"/>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        app:boxStrokeColor="@color/primary_green"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-        <LinearLayout
-            android:id="@+id/achievementsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/contribution_background"
-            android:padding="8dp"
-            android:layout_marginBottom="16dp">
+                        <EditText
+                            android:id="@+id/etEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Email Address"
+                            android:inputType="textEmailAddress"
+                            android:enabled="false"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/medal"
-                android:layout_marginEnd="8dp"/>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnEditProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Edit Profile"
+                        android:backgroundTint="@color/primary_green"/>
 
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSaveProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Save"
+                        android:visibility="gone"
+                        android:backgroundTint="@color/primary_green"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Achievements Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp">
+
+                <LinearLayout
+                    android:id="@+id/achievementsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/medal"
+                        android:layout_marginEnd="16dp"
+                        app:tint="@color/primary_green"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="View Your Badges"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary_green"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/baseline_chevron_right_24"
+                        app:tint="@color/primary_green"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Events Container -->
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="View Your Badges"
-                android:textSize="16sp"/>
+                android:text="Events Joined"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/primary_green"
+                android:layout_marginBottom="8dp"/>
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/baseline_chevron_right_24"
-                android:contentDescription="View Badges"/>
+            <LinearLayout
+                android:id="@+id/eventsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Litter Reports Container -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Recent Litter Reports"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/primary_green"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/litterReportsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
         </LinearLayout>
-
-        <!-- Display Litter Reports Section -->
-        <TextView
-            android:id="@+id/tvLitterReportsTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Your Litter Reports"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:id="@+id/litterReportsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:background="@drawable/contribution_background"
-            android:layout_marginBottom="16dp">
-        </LinearLayout>
-
-        <!-- Display Events Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Events Attended"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
-
-        <LinearLayout
-            android:id="@+id/eventsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:background="@drawable/contribution_background"
-            android:layout_marginBottom="16dp">
-        </LinearLayout>
-
     </LinearLayout>
 </ScrollView>
