@@ -79,14 +79,14 @@ public class LoginPage extends AppCompatActivity {
         googleSignInButton.setOnClickListener(v -> signInWithGoogle());
     }
 
-    private void loginUser(String email, String password) {
+    private void loginUser (String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        if (firebaseUser != null) {
-                            String userId = firebaseUser.getUid();
-                            validateUser(userId);
+                        FirebaseUser  firebaseUser  = mAuth.getCurrentUser ();
+                        if (firebaseUser  != null) {
+                            String userId = firebaseUser .getUid();
+                            validateUser (userId, firebaseUser ); // Pass firebaseUser  to validateUser
                         }
                     } else {
                         Toast.makeText(LoginPage.this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -94,7 +94,7 @@ public class LoginPage extends AppCompatActivity {
                 });
     }
 
-    private void validateUser(String userId) {
+    private void validateUser (String userId, FirebaseUser  firebaseUser ) {
         databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -102,14 +102,43 @@ public class LoginPage extends AppCompatActivity {
                 Log.d("Debug", "Database snapshot: " + snapshot.getValue());
 
                 if (snapshot.exists()) {
-                    Log.d("Debug", "User found: " + snapshot.getValue());
+                    Log.d("Debug", "User  found: " + snapshot.getValue());
                     Toast.makeText(LoginPage.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                    // Add 2 points to the user's points
+                    int currentPoints = snapshot.child("points").getValue(Integer.class) != null ? snapshot.child("points").getValue(Integer.class) : 0;
+                    Log.d("Debug", "Current Points: " + currentPoints);
+                    int newPoints = currentPoints + 2;
+
+                    // Update the points in the database
+                    databaseReference.child(userId).child("points").setValue(newPoints)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d("Debug", "Points updated successfully to: " + newPoints);
+                                } else {
+                                    Log.e("Debug", "Failed to update points: " + task.getException().getMessage());
+                                }
+                            });
+
+                    // Check if name and email are stored, if not, store them
+                    String name = snapshot.child("name").getValue(String.class);
+                    String email = snapshot.child("email").getValue(String.class);
+                    if (name == null || email == null) {
+                        if (firebaseUser  != null) {
+                            name = firebaseUser .getDisplayName();
+                            email = firebaseUser .getEmail();
+                            Log.d("Debug", "Storing name: " + name + " and email: " + email);
+                            databaseReference.child(userId).child("name").setValue(name);
+                            databaseReference.child(userId).child("email").setValue(email);
+                        }
+                    }
+
                     Intent intent = new Intent(LoginPage.this, Dashboard.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Log.d("Debug", "User ID not found in database: " + userId);
-                    Toast.makeText(LoginPage.this, "User not registered", Toast.LENGTH_SHORT).show();
+                    Log.d("Debug", "User  ID not found in database: " + userId);
+                    Toast.makeText(LoginPage.this, "User  not registered", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 }
             }
@@ -156,7 +185,7 @@ public class LoginPage extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         String userId = user != null ? user.getUid() : null;
                         if (userId != null) {
-                            validateUser(userId); // Validate user after successful Google login
+                            validateUser(userId, user); // Validate user after successful Google login
                         }
                     } else {
                         Log.w("Google Sign-In", "signInWithCredential:failure", task.getException());
