@@ -254,8 +254,8 @@ public class Profile extends AppCompatActivity {
         // Fetch litter reports from Firestore based on the current user
         String userId = currentUser.getUid();
 
-        db.collection("litterReports")
-                .whereEqualTo("userId", userId)
+        db.collection("users").document(userId)
+                .collection("litterReports")  // Updated collection path
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -277,8 +277,11 @@ public class Profile extends AppCompatActivity {
                                 // Get the litter report details from Firestore document
                                 String photoUrl = document.getString("imageUrl");
                                 String litterType = document.getString("litterType");
-                                double latitude = document.getDouble("latitude");
-                                double longitude = document.getDouble("longitude");
+                                Double latitude = document.getDouble("latitude");
+                                Double longitude = document.getDouble("longitude");
+                                Integer points = document.getLong("points") != null
+                                        ? document.getLong("points").intValue()
+                                        : 0;
 
                                 // Set the photo if available
                                 if (photoUrl != null && !photoUrl.isEmpty()) {
@@ -286,7 +289,7 @@ public class Profile extends AppCompatActivity {
                                 }
 
                                 // Set the litter type and location text
-                                tvLitterType.setText("Type: " + litterType);
+                                tvLitterType.setText("Type: " + litterType + " (Points: " + points + ")");
                                 tvLitterLocation.setText(String.format("Location: %.4f, %.4f", latitude, longitude));
 
                                 // Add the view to the container
@@ -299,4 +302,5 @@ public class Profile extends AppCompatActivity {
                     }
                 });
     }
+
 }

@@ -397,6 +397,16 @@ public class LitterReporting extends AppCompatActivity {
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Report submitted", Toast.LENGTH_SHORT).show();
                     updateUserReportCount(userId);
+
+                    // Update total points
+                    db.collection("users").document(userId)
+                            .update("totalPoints", FieldValue.increment(points))
+                            .addOnSuccessListener(aVoid ->
+                                    Log.d("LitterReporting", "Total points updated")
+                            )
+                            .addOnFailureListener(e ->
+                                    Log.e("LitterReporting", "Failed to update total points", e)
+                            );
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(this, "Report submission failed", Toast.LENGTH_SHORT).show()
