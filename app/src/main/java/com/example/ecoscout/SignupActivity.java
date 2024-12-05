@@ -9,9 +9,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseUser ;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
@@ -20,7 +19,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText editTextPassword, editTextConfirmPassword;
     private Button buttonSignup;
     private FirebaseAuth mAuth;
-    private DatabaseReference databaseReference;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +27,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
 
         mAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        db = FirebaseFirestore.getInstance();
 
         editTextFullName = findViewById(R.id.editTextFullName);
         editTextAddress = findViewById(R.id.editTextAddress);
@@ -47,7 +46,7 @@ public class SignupActivity extends AppCompatActivity {
             String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
             if (validateInput(fullName, address, phone, email, password, confirmPassword)) {
-                registerUser(fullName, address, phone, email, password);
+                registerUser (fullName, address, phone, email, password);
             }
         });
     }
@@ -76,37 +75,40 @@ public class SignupActivity extends AppCompatActivity {
         return true;
     }
 
-    private void registerUser(String fullName, String address, String phone, String email, String password) {
+    private void registerUser (String fullName, String address, String phone, String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        if (firebaseUser != null) {
-                            String userId = firebaseUser.getUid();
+            if (task.isSuccessful()) {
+                FirebaseUser  firebaseUser  = mAuth.getCurrentUser ();
+                if (firebaseUser  != null) {
+                    String userId = firebaseUser .getUid();
 
-                            // Save user details to Firebase Database
-                            HashMap<String, String> userMap = new HashMap<>();
-                            userMap.put("userId", userId);
-                            userMap.put("fullName", fullName);
-                            userMap.put("address", address);
-                            userMap.put("phone", phone);
-                            userMap.put("email", email);
+                    // Save user details to Firestore
+                    HashMap<String, Object> userMap = new HashMap<>();
+                    userMap.put("userId", userId);
+                    userMap.put("fullName", fullName);
+                    userMap.put("address", address);
+                    userMap.put("phone", phone);
+                    userMap.put("email", email);
+                    userMap.put("totalPoints", 0); // Initialize total points
+                    userMap.put("litterReportCount", 0); // Initialize litter report count
+                    userMap.put("eventsJoined", 0); // Initialize events joined
 
-                            databaseReference.child(userId).setValue(userMap)
-                                    .addOnCompleteListener(saveTask -> {
-                                        if (saveTask.isSuccessful()) {
-                                            Toast.makeText(SignupActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(SignupActivity.this, Dashboard.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            Toast.makeText(SignupActivity.this, "Failed to save user details: " + saveTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    } else {
-                        Toast.makeText(SignupActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                    db.collection("users").document(userId).set(userMap)
+                            .addOnCompleteListener(saveTask -> {
+                                if (saveTask.isSuccessful()) {
+                                    Toast.makeText(SignupActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(SignupActivity.this, Dashboard.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(SignupActivity.this, "Failed to save user details: " + saveTask.getException().getMessage(), Toast.LENGTH_SHORT). show();
+                                }
+                            });
+                }
+            } else {
+                Toast.makeText(SignupActivity.this, "Registration failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
