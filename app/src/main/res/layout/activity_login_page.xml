@@ -6,25 +6,12 @@
     android:background="@drawable/login_bg"
     tools:context=".LoginPage">
 
-    <!-- Back Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/backButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/round_keyboard_backspace_black_24dp"
-        app:backgroundTint="@android:color/transparent"
-        app:tint="#229FD1" />
-
     <!-- Main Content -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/backButton"
         android:layout_margin="20dp"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="vertical">
 
         <!-- Welcome Text -->
@@ -33,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="Welcome back!"
             android:textSize="28sp"
-            android:textColor="#229FD1"
+            android:textColor="@color/dark_green"
             android:textStyle="bold" />
 
         <TextView
@@ -50,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#229FD1"
+            app:boxStrokeColor="@color/accent_green"
             app:hintTextAppearance="@style/TextInputHintStyle">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -68,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#229FD1"
+            app:boxStrokeColor="@color/accent_green"
             app:hintTextAppearance="@style/TextInputHintStyle">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -80,13 +67,38 @@
                 android:textColor="#323232" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Show Password and Remember Me Checkboxes -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:gravity="start">
+
+            <!-- Show Password Checkbox -->
+            <CheckBox
+                android:id="@+id/showPasswordCheckbox"
+                android:layout_width="183dp"
+                android:layout_height="48dp"
+                android:text="Show Password" />
+
+            <!-- Remember Me Checkbox -->
+            <CheckBox
+                android:id="@+id/rememberMeCheckbox"
+                android:layout_width="181dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="4dp"
+                android:text="Remember Me" />
+        </LinearLayout>
+
         <!-- Login Button -->
         <Button
             android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="30dp"
-            android:backgroundTint="#229FD1"
+            android:backgroundTint="@color/dark_green"
             android:text="Log in"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
@@ -132,5 +144,19 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- Terms and Conditions Link -->
+        <TextView
+            android:id="@+id/termsConditionsLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="48dp"
+            android:text="Terms and Conditions"
+            android:textColor="@color/dark_green"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>
