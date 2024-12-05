@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -118,19 +119,22 @@ public class Profile extends AppCompatActivity {
 
     // Rest of the methods remain the same as in your original code
     private void loadProfileData() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser ().getUid();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         db.collection("users").document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        // Load points from Firestore
-                        Long points = documentSnapshot.getLong("totalPoints");
+                        // Get total points directly
+                        Long totalPoints = documentSnapshot.getLong("totalPoints");
+                        int points = (totalPoints != null) ? totalPoints.intValue() : 0;
+
+                        // Load other profile information
                         Long eventsJoined = documentSnapshot.getLong("eventsJoined");
 
                         // Update ProfileData and UI
                         ProfileData profileData = ProfileData.getInstance();
-                        profileData.setTotalPoints(points != null ? points.intValue() : 0);
+                        profileData.setTotalPoints(points);
                         profileData.setEventsJoined(eventsJoined != null ? eventsJoined.intValue() : 0);
 
                         // Load name and email
@@ -140,12 +144,16 @@ public class Profile extends AppCompatActivity {
                         // Update UI
                         etName.setText(name != null ? name : "No name available");
                         etEmail.setText(email != null ? email : "No email available");
-                        tvTotalPoints.setText("Total Points: " + profileData.getTotalPoints());
+                        tvTotalPoints.setText("Total Points: " + points);
                         tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
+
+                        // For debugging
+                        Log.d("Profile", "Total Points loaded: " + points);
                     }
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Failed to load profile data", Toast.LENGTH_SHORT).show();
+                    Log.e("Profile", "Error loading profile data", e);
                 });
     }
 

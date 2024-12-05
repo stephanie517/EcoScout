@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginPage extends AppCompatActivity {
 
@@ -95,26 +96,38 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void validateUser (String userId, FirebaseUser  firebaseUser ) {
-        databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference rtdbReference = FirebaseDatabase.getInstance().getReference("Users");
+        FirebaseFirestore firestoreDb = FirebaseFirestore.getInstance();
+
+        rtdbReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.d("Debug", "Checking userId: " + userId);
                 Log.d("Debug", "Database snapshot: " + snapshot.getValue());
 
                 if (snapshot.exists()) {
-                    Log.d("Debug", "User  found: " + snapshot.getValue());
+                    Log.d("Debug", "User found: " + snapshot.getValue());
                     Toast.makeText(LoginPage.this, "Login successful", Toast.LENGTH_SHORT).show();
 
-                    // Add 2 points to the user's points
-                    int currentPoints = snapshot.child("points").getValue(Integer.class) != null ? snapshot.child("points").getValue(Integer.class) : 0;
+                    // Add 2 points to the user's points in Realtime Database
+                    int currentPoints = snapshot.child("points").getValue(Integer.class) != null ?
+                            snapshot.child("points").getValue(Integer.class) : 0;
                     Log.d("Debug", "Current Points: " + currentPoints);
                     int newPoints = currentPoints + 2;
 
-                    // Update the points in the database
-                    databaseReference.child(userId).child("points").setValue(newPoints)
+                    // Update the points in Realtime Database
+                    rtdbReference.child(userId).child("points").setValue(newPoints)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     Log.d("Debug", "Points updated successfully to: " + newPoints);
+
+                                    // Update points in Firestore
+                                    firestoreDb.collection("users").document(userId)
+                                            .update("totalPoints", newPoints)
+                                            .addOnSuccessListener(aVoid ->
+                                                    Log.d("Debug", "Firestore points updated successfully"))
+                                            .addOnFailureListener(e ->
+                                                    Log.e("Debug", "Failed to update Firestore points", e));
                                 } else {
                                     Log.e("Debug", "Failed to update points: " + task.getException().getMessage());
                                 }
@@ -124,12 +137,12 @@ public class LoginPage extends AppCompatActivity {
                     String name = snapshot.child("name").getValue(String.class);
                     String email = snapshot.child("email").getValue(String.class);
                     if (name == null || email == null) {
-                        if (firebaseUser  != null) {
-                            name = firebaseUser .getDisplayName();
-                            email = firebaseUser .getEmail();
+                        if (firebaseUser != null) {
+                            name = firebaseUser.getDisplayName();
+                            email = firebaseUser.getEmail();
                             Log.d("Debug", "Storing name: " + name + " and email: " + email);
-                            databaseReference.child(userId).child("name").setValue(name);
-                            databaseReference.child(userId).child("email").setValue(email);
+                            rtdbReference.child(userId).child("name").setValue(name);
+                            rtdbReference.child(userId).child("email").setValue(email);
                         }
                     }
 
@@ -137,8 +150,8 @@ public class LoginPage extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Log.d("Debug", "User  ID not found in database: " + userId);
-                    Toast.makeText(LoginPage.this, "User  not registered", Toast.LENGTH_SHORT).show();
+                    Log.d("Debug", "User ID not found in database: " + userId);
+                    Toast.makeText(LoginPage.this, "User not registered", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 }
             }
@@ -176,7 +189,6 @@ public class LoginPage extends AppCompatActivity {
         }
     }
 
-    // Authenticate with Firebase using the Google account
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -185,7 +197,25 @@ public class LoginPage extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         String userId = user != null ? user.getUid() : null;
                         if (userId != null) {
-                            validateUser(userId, user); // Validate user after successful Google login
+                            // Here we would add the 2 points logic similar to the previous method
+                            FirebaseDatabase.getInstance().getReference("Users").child(userId)
+                                    .child("points").get().addOnSuccessListener(snapshot -> {
+                                        int currentPoints = snapshot.getValue(Integer.class) != null ?
+                                                snapshot.getValue(Integer.class) : 0;
+                                        int newPoints = currentPoints + 2;
+
+                                        // Update points in Realtime Database
+                                        FirebaseDatabase.getInstance().getReference("Users")
+                                                .child(userId).child("points").setValue(newPoints)
+                                                .addOnSuccessListener(aVoid -> {
+                                                    // Update points in Firestore
+                                                    FirebaseFirestore.getInstance().collection("users")
+                                                            .document(userId)
+                                                            .update("totalPoints", newPoints);
+                                                });
+
+                                        validateUser(userId, user);
+                                    });
                         }
                     } else {
                         Log.w("Google Sign-In", "signInWithCredential:failure", task.getException());
