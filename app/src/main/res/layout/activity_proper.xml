@@ -15,6 +15,22 @@
         android:elevation="8dp"
         android:clipToPadding="false">
 
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_gravity="start"
+            android:padding="12dp"
+            android:backgroundTint="#E0E0E0"
+            android:text="Back to Dashboard"
+            android:textColor="#3C3C3C"
+            android:textSize="14sp"
+            android:drawableStart="@drawable/ic_back"
+            android:drawablePadding="8dp"
+            android:elevation="5dp"
+            app:cornerRadius="12dp" />
+
         <TextView
             android:id="@+id/titleText"
             android:layout_width="match_parent"
