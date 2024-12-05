@@ -98,8 +98,7 @@ public class EventJoinRequest extends AppCompatActivity {
                                                         "Event joined successfully! +5 points",
                                                         Toast.LENGTH_LONG).show();
 
-                                                // Instead of going to MainActivity, go to Profile
-                                                Intent profileIntent = new Intent(EventJoinRequest.this, Profile.class);
+                                                Intent profileIntent = new Intent(EventJoinRequest.this, Dashboard.class);
                                                 profileIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                                                         Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 startActivity(profileIntent);
