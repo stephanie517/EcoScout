@@ -237,7 +237,7 @@ public class LoginPage extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 Log.w("Google Sign-In", "signInResult:failed code=" + e.getStatusCode());
-                Toast.makeText(this, "Sign-in failed, please try again.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sign-in", Toast.LENGTH_SHORT).show();
             }
         }
     }
