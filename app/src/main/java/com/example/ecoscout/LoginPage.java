@@ -97,7 +97,7 @@ public class LoginPage extends AppCompatActivity {
                 });
     }
 
-    private void validateUser(String userId) {
+    private void validateUser (String userId) {
         databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -105,14 +105,29 @@ public class LoginPage extends AppCompatActivity {
                 Log.d("Debug", "Database snapshot: " + snapshot.getValue());
 
                 if (snapshot.exists()) {
-                    Log.d("Debug", "User found: " + snapshot.getValue());
+                    Log.d("Debug", "User  found: " + snapshot.getValue());
                     Toast.makeText(LoginPage.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                    // Add 2 points to the user's points
+                    int currentPoints = snapshot.child("points").getValue(Integer.class) != null ? snapshot.child("points").getValue(Integer.class) : 0;
+                    int newPoints = currentPoints + 2;
+
+                    // Update the points in the database
+                    databaseReference.child(userId).child("points").setValue(newPoints)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d("Debug", "Points updated successfully to: " + newPoints);
+                                } else {
+                                    Log.e("Debug", "Failed to update points: " + task.getException().getMessage());
+                                }
+                            });
+
                     Intent intent = new Intent(LoginPage.this, Dashboard.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Log.d("Debug", "User ID not found in database: " + userId);
-                    Toast.makeText(LoginPage.this, "User not registered", Toast.LENGTH_SHORT).show();
+                    Log.d("Debug", "User  ID not found in database: " + userId);
+                    Toast.makeText(LoginPage.this, "User  not registered", Toast.LENGTH_SHORT).show();
                     mAuth.signOut();
                 }
             }
