@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,15 +53,36 @@ public class EventJoinRequest extends AppCompatActivity {
 
         // Handle Confirm button click
         confirmButton.setOnClickListener(v -> {
-            String message = optionalMessage.getText().toString().trim();
-
-            // Add points for joining event
-            ProfileData profileData = ProfileData.getInstance();
-            profileData.addPoints(5);
-            profileData.incrementEventsJoined();
-
-            // Save event to Firestore
             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            // Update points in Firestore
+            Map<String, Object> userData = new HashMap<>();
+            ProfileData profileData = ProfileData.getInstance();
+            int currentPoints = profileData.getTotalPoints() + 5;
+            int currentEventsJoined = profileData.getEventsJoined() + 1;
+
+            userData.put("totalPoints", currentPoints);
+            userData.put("eventsJoined", currentEventsJoined);
+
+            db.collection("users").document(userId)
+                    .set(userData, SetOptions.merge())
+                    .addOnSuccessListener(documentReference -> {
+                        // Update local ProfileData
+                        profileData.setTotalPoints(currentPoints);
+                        profileData.setEventsJoined(currentEventsJoined);
+
+                        Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
+
+                        // Redirect to main page
+                        Intent mainIntent = new Intent(EventJoinRequest.this, MainActivity.class);
+                        startActivity(mainIntent);
+                        finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(this, "Failed to update points", Toast.LENGTH_SHORT).show();
+                    });
+
+            // Save event to Firestore (existing code)
             Map<String, Object> eventData = new HashMap<>();
             eventData.put("userId", userId);
             eventData.put("eventName", name);
@@ -70,12 +92,7 @@ public class EventJoinRequest extends AppCompatActivity {
             db.collection("userEvents")
                     .add(eventData)
                     .addOnSuccessListener(documentReference -> {
-                        Toast.makeText(this, "You have received 5 points for joining this event!", Toast.LENGTH_LONG).show();
-
-                        // Redirect to main page
-                        Intent mainIntent = new Intent(EventJoinRequest.this, MainActivity.class);
-                        startActivity(mainIntent);
-                        finish();
+                        // Event saved successfully
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Failed to save event", Toast.LENGTH_SHORT).show();

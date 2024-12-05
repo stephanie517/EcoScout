@@ -35,6 +35,14 @@ public class ProfileData {
         this.totalPoints += points;
     }
 
+    public void setTotalPoints(int points) {
+        this.totalPoints = points;
+    }
+
+    public void setEventsJoined(int events) {
+        this.eventsJoined = events;
+    }
+
     public int getEventsJoined() {
         return eventsJoined;
     }

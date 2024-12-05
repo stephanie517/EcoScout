@@ -31,7 +31,7 @@ public class Profile extends AppCompatActivity {
     private Button btnSaveProfile, btnEditProfile;
     private ProfileData profileData;
     private TextView tvTotalPoints, tvEventsJoined;
-    private LinearLayout achievementsContainer; // New addition
+    private LinearLayout achievementsContainer;
 
     // Constants for SharedPreferences
     private static final String PREFS_NAME = "UserProfilePrefs";
@@ -118,19 +118,31 @@ public class Profile extends AppCompatActivity {
 
     // Rest of the methods remain the same as in your original code
     private void loadProfileData() {
-        ProfileData profileData = ProfileData.getInstance();
-        // Load data from ProfileData
-        etName.setText(profileData.getName());
-        etEmail.setText(profileData.getEmail());
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Update points display
-        tvTotalPoints.setText("Total Points: " + profileData.getTotalPoints());
+        db.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Load points from Firestore
+                        Long points = documentSnapshot.getLong("totalPoints");
+                        Long eventsJoined = documentSnapshot.getLong("eventsJoined");
 
-        // Update events joined
-        tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
+                        // Update ProfileData and UI
+                        ProfileData profileData = ProfileData.getInstance();
+                        profileData.setTotalPoints(points != null ? points.intValue() : 0);
+                        profileData.setEventsJoined(eventsJoined != null ? eventsJoined.intValue() : 0);
 
-        // Fetch and display user's environmental contributions
-        getLitterReportCount();
+                        // Update UI
+                        etName.setText(profileData.getName());
+                        etEmail.setText(profileData.getEmail());
+                        tvTotalPoints.setText("Total Points: " + profileData.getTotalPoints());
+                        tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load profile data", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void saveProfileData() {
