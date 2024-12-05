@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F7F0"
     tools:context=".EventDetailed">
 
     <LinearLayout
@@ -15,32 +16,31 @@
         android:gravity="center">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Confirm Join Event"
             android:textSize="24sp"
-            android:textColor="@color/lavender"
-            android:layout_gravity="center"
+            android:textColor="#2D5F3D"
+            android:gravity="center"
             android:layout_marginBottom="20dp"
             android:textStyle="bold" />
 
         <!-- Event Name -->
         <TextView
             android:id="@+id/joinEventName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Event Name"
             android:gravity="center"
-            android:layout_gravity="center"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:layout_marginBottom="16dp"
-            android:textColor="@android:color/black" />
+            android:textColor="#4A7F5A" />
 
         <!-- Event Image -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp">
@@ -49,80 +49,144 @@
                 android:id="@+id/joinEventImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/bwc"/>
         </androidx.cardview.widget.CardView>
 
-        <!-- Event Date -->
-        <TextView
-            android:id="@+id/joinEventDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Date: "
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            android:textColor="@android:color/black"
-            android:layout_gravity="start" />
-
-        <!-- Event Location -->
-        <TextView
-            android:id="@+id/joinEventLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Location: "
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp"
-            android:textColor="@android:color/black"
-            android:layout_gravity="start" />
-
-        <!-- Event Description -->
-        <TextView
-            android:id="@+id/joinEventDesc"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Details: "
-            android:fontFamily="@font/lato_black"
-            android:textSize="16sp"
             android:layout_marginBottom="16dp"
-            android:textColor="@android:color/black" />
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="#E6F3E6">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Event Date -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date:"
+                    android:textColor="#2D5F3D"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/joinEventDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Event Date"
+                    android:textColor="#4A7F5A"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Event Location -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location:"
+                    android:textColor="#2D5F3D"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/joinEventLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Event Location"
+                    android:textColor="#4A7F5A"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Event Description -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Details:"
+                    android:textColor="#2D5F3D"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/joinEventDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Event Description"
+                    android:textColor="#4A7F5A"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Optional Message -->
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Additional Message (optional):"
             android:textSize="18sp"
-            android:layout_marginBottom="8dp"
-            android:textColor="@android:color/black" />
+            android:textColor="#2D5F3D"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
 
-        <EditText
-            android:id="@+id/optionalMessage"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:hint="(e.g., questions, special needs, or confirmation)..."
-            android:gravity="top"
-            android:background="@drawable/rounded_edittext"
-            android:padding="12dp"
-            android:inputType="textMultiLine"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Confirm Button -->
-        <Button
-            android:id="@+id/confirmJoinButton"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Confirm"
-            android:textSize="18sp"
-            android:layout_marginBottom="10dp"
-            android:textColor="@android:color/white" />
+            android:layout_marginBottom="16dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxBackgroundColor="#E6F3E6"
+            app:boxStrokeColor="#3F8E2D">
 
-        <!-- Cancel Button -->
-        <Button
-            android:id="@+id/cancelJoinButton"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/optionalMessage"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="(e.g., questions, special needs, or confirmation)..."
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:padding="12dp"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel"
-            android:textSize="18sp"
-            android:textColor="@android:color/white" />
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
 
+            <!-- Confirm Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/confirmJoinButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Confirm"
+                android:textSize="18sp"
+                android:layout_marginBottom="16dp"
+                app:cornerRadius="12dp"
+                android:backgroundTint="#3F8E2D"
+                android:padding="16dp"/>
+
+            <!-- Cancel Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelJoinButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textSize="18sp"
+                app:cornerRadius="12dp"
+                android:textColor="@color/white"
+                android:backgroundTint="#A0CEA0"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+        </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
