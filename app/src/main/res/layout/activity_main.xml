@@ -36,6 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Frosted Glass Effect Card -->
+    <!--CENTER -->
     <androidx.cardview.widget.CardView
         android:id="@+id/frosted_card"
         android:layout_width="0dp"
