@@ -38,6 +38,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -340,13 +342,78 @@ public class LitterReporting extends AppCompatActivity {
         }
 
         int points = categorizeLitterAndGetPoints(selectedLitterType);
-        Log.d("LitterReporting", "Points: " + points);
 
+        String imagePath = null;
         if (imageUri != null) {
-            uploadImageAndSaveReport(currentUser.getUid(), selectedLitterType, points);
-        } else {
-            saveReportToFirestore(currentUser.getUid(), selectedLitterType, null, points);
+            imagePath = saveImageLocally(imageUri);
+            if (imagePath == null) {
+                Toast.makeText(this, "Failed to save image locally", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
+
+        // Save the report to Firestore
+        saveReportToFirestore(currentUser.getUid(), selectedLitterType, imagePath, points);
+    }
+
+    private String saveImageLocally(Uri imageUri) {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+
+            // Create a directory in internal storage
+            File directory = new File(getFilesDir(), "litter_images");
+            if (!directory.exists() && !directory.mkdirs()) {
+                Log.e("LocalStorage", "Failed to create directory");
+                return null;
+            }
+
+            // Create a file with a unique name
+            String fileName = UUID.randomUUID().toString() + ".jpg";
+            File imageFile = new File(directory, fileName);
+
+            // Save the bitmap to the file
+            try (FileOutputStream fos = new FileOutputStream(imageFile)) {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            }
+
+            Log.d("LocalStorage", "Image saved locally: " + imageFile.getAbsolutePath());
+            return imageFile.getAbsolutePath(); // Return the file path
+        } catch (IOException e) {
+            Log.e("LocalStorageError", "Failed to save image", e);
+            return null;
+        }
+    }
+
+    private void saveReportToFirestore(String userId, String litterType, String imagePath, int points) {
+        LitterReport litterReport = new LitterReport(
+                userId,
+                litterType,
+                litterLocation.getLatitude(),
+                litterLocation.getLongitude(),
+                imagePath, // Save the local file path
+                points
+        );
+
+        db.collection("users").document(userId)
+                .collection("litterReports")
+                .add(litterReport)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(this, "Report submitted", Toast.LENGTH_SHORT).show();
+                    updateUserReportCount(userId);
+
+                    // Update total points
+                    db.collection("users").document(userId)
+                            .update("totalPoints", FieldValue.increment(points))
+                            .addOnSuccessListener(aVoid ->
+                                    Log.d("LitterReporting", "Total points updated")
+                            )
+                            .addOnFailureListener(e ->
+                                    Log.e("LitterReporting", "Failed to update total points", e)
+                            );
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(this, "Report submission failed", Toast.LENGTH_SHORT).show()
+                );
     }
 
     private int categorizeLitterAndGetPoints(String litterType) {
@@ -379,38 +446,6 @@ public class LitterReporting extends AppCompatActivity {
                                 .addOnFailureListener(e ->
                                         Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show()
                                 ));
-    }
-
-    private void saveReportToFirestore(String userId, String litterType, String imageUrl, int points) {
-        LitterReport litterReport = new LitterReport(
-                userId,
-                litterType,
-                litterLocation.getLatitude(),
-                litterLocation.getLongitude(),
-                imageUrl,
-                points
-        );
-
-        db.collection("users").document(userId)
-                .collection("litterReports")
-                .add(litterReport)
-                .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(this, "Report submitted", Toast.LENGTH_SHORT).show();
-                    updateUserReportCount(userId);
-
-                    // Update total points
-                    db.collection("users").document(userId)
-                            .update("totalPoints", FieldValue.increment(points))
-                            .addOnSuccessListener(aVoid ->
-                                    Log.d("LitterReporting", "Total points updated")
-                            )
-                            .addOnFailureListener(e ->
-                                    Log.e("LitterReporting", "Failed to update total points", e)
-                            );
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(this, "Report submission failed", Toast.LENGTH_SHORT).show()
-                );
     }
 
     private void updateUserReportCount(String userId) {

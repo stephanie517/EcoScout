@@ -1,6 +1,8 @@
 package com.example.ecoscout;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,6 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.File;
 import java.util.List;
 
 public class Profile extends AppCompatActivity {
@@ -248,34 +251,33 @@ public class Profile extends AppCompatActivity {
     }
 
     private void displayLitterReports() {
-        LinearLayout litterReportsContainer = findViewById(R.id.litterReportsContainer);
-        litterReportsContainer.removeAllViews(); // Clear any existing views
+        litterReportsContainer.removeAllViews(); // Clear existing views
 
-        // Fetch litter reports from Firestore based on the current user
+        // Fetch litter reports for the current user
         String userId = currentUser.getUid();
 
         db.collection("users").document(userId)
-                .collection("litterReports")  // Updated collection path
+                .collection("litterReports")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().isEmpty()) {
-                            // No litter reports yet
+                            // Display a message if there are no litter reports
                             TextView noReportsText = new TextView(this);
                             noReportsText.setText("No litter reports yet");
                             noReportsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                             litterReportsContainer.addView(noReportsText);
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Inflate the layout for each litter report
+                                // Inflate the litter report item layout
                                 View litterReportView = getLayoutInflater().inflate(R.layout.item_litter_report, litterReportsContainer, false);
 
                                 ImageView ivLitterPhoto = litterReportView.findViewById(R.id.ivLitterPhoto);
                                 TextView tvLitterType = litterReportView.findViewById(R.id.tvLitterType);
                                 TextView tvLitterLocation = litterReportView.findViewById(R.id.tvLitterLocation);
 
-                                // Get the litter report details from Firestore document
-                                String photoUrl = document.getString("imageUrl");
+                                // Retrieve details from Firestore document
+                                String photoPath = document.getString("imageUrl"); // Local file path
                                 String litterType = document.getString("litterType");
                                 Double latitude = document.getDouble("latitude");
                                 Double longitude = document.getDouble("longitude");
@@ -283,12 +285,18 @@ public class Profile extends AppCompatActivity {
                                         ? document.getLong("points").intValue()
                                         : 0;
 
-                                // Set the photo if available
-                                if (photoUrl != null && !photoUrl.isEmpty()) {
-                                    Glide.with(this).load(photoUrl).into(ivLitterPhoto);
+                                // Load the local image
+                                if (photoPath != null && !photoPath.isEmpty()) {
+                                    File imgFile = new File(photoPath);
+                                    if (imgFile.exists()) {
+                                        Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                        ivLitterPhoto.setImageBitmap(bitmap);
+                                    } else {
+                                        ivLitterPhoto.setImageResource(R.drawable.placeholder_image); // Placeholder
+                                    }
                                 }
 
-                                // Set the litter type and location text
+                                // Set text for litter type and location
                                 tvLitterType.setText("Type: " + litterType + " (Points: " + points + ")");
                                 tvLitterLocation.setText(String.format("Location: %.4f, %.4f", latitude, longitude));
 
@@ -297,10 +305,10 @@ public class Profile extends AppCompatActivity {
                             }
                         }
                     } else {
-                        // Handle error
                         Toast.makeText(this, "Failed to load litter reports", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
 
 }
