@@ -43,20 +43,6 @@ public class Profile extends AppCompatActivity {
     private static final String PREFS_NAME = "UserProfilePrefs";
     private static final String KEY_PROFILE_IMAGE_URI = "ProfileImageUri";
 
-    // Save photo URI to SharedPreferences
-    private void saveProfileImageUri(String uri) {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_PROFILE_IMAGE_URI, uri);
-        editor.apply();
-    }
-
-    // Retrieve photo URI from SharedPreferences
-    private String getProfileImageUri() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        return sharedPreferences.getString(KEY_PROFILE_IMAGE_URI, null);
-    }
-    ;
     // Firestore instance
     private FirebaseFirestore db;
 
@@ -64,8 +50,6 @@ public class Profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
-
-            litterReportsContainer = findViewById(R.id.litterReportsContainer); // Your LinearLayout in profile.xml
 
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
@@ -84,11 +68,9 @@ public class Profile extends AppCompatActivity {
         achievementsContainer = findViewById(R.id.achievementsContainer);
         litterReportsContainer = findViewById(R.id.litterReportsContainer);
 
-
         // Initialize ProfileData using the Singleton instance
         profileData = ProfileData.getInstance();
         loadProfileData();
-
 
         // Upload Photo Button
         btnUploadPhoto.setOnClickListener(v -> openGallery());
@@ -126,10 +108,22 @@ public class Profile extends AppCompatActivity {
         displayJoinedEvents();
         // Show Litter Reports
         displayLitterReports();
-
     }
 
-    // Rest of the methods remain the same as in your original code
+    // Save photo URI to SharedPreferences
+    private void saveProfileImageUri(String uri) {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_PROFILE_IMAGE_URI, uri);
+        editor.apply();
+    }
+
+    // Retrieve photo URI from SharedPreferences
+    private String getProfileImageUri() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        return sharedPreferences.getString(KEY_PROFILE_IMAGE_URI, null);
+    }
+
     private void loadProfileData() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -137,9 +131,12 @@ public class Profile extends AppCompatActivity {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        // Get total points directly
+                        // Get total points and litter report count
                         Long totalPoints = documentSnapshot.getLong("totalPoints");
+                        Long litterReportCount = documentSnapshot.getLong("litterReportCount");
+
                         int points = (totalPoints != null) ? totalPoints.intValue() : 0;
+                        int reportCount = (litterReportCount != null) ? litterReportCount.intValue() : 0;
 
                         // Load other profile information
                         Long eventsJoined = documentSnapshot.getLong("eventsJoined");
@@ -157,10 +154,11 @@ public class Profile extends AppCompatActivity {
                         etName.setText(name != null ? name : "No name available");
                         etEmail.setText(email != null ? email : "No email available");
                         tvTotalPoints.setText("Total Points: " + points);
+                        tvLitterReports.setText("Litter Reports: " + reportCount);
                         tvEventsJoined.setText("Events Joined: " + profileData.getEventsJoined());
 
-                        // For debugging
-                        Log.d("Profile", "Total Points loaded: " + points);
+                        // Debugging log
+                        Log.d("Profile", "Total Points: " + points + ", Litter Reports: " + reportCount);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -173,26 +171,20 @@ public class Profile extends AppCompatActivity {
         // Save data to ProfileData
         profileData.setName(etName.getText().toString());
         profileData.setEmail(etEmail.getText().toString());
-    }
 
-    private void getLitterReportCount() {
-        // Fetch the count of litter reports from Firestore
-        db.collection("litterReports")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        int count = 0;
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            // You can add additional filtering logic here if needed
-                            count++;
-                        }
-                        tvLitterReports.setText("Litter Reports: " + count);
-                    } else {
-                        Toast.makeText(this, "Failed to load litter reports", Toast.LENGTH_SHORT).show();
-                    }
+        // Update Firestore with new profile data
+        String userId = currentUser.getUid();
+        db.collection("users").document(userId)
+                .update(
+                        "name", etName.getText().toString(),
+                        "email", etEmail.getText().toString()
+                )
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show();
                 });
-        // Fetch Litter Reports and Events
-
     }
 
     private void openGallery() {
@@ -209,6 +201,7 @@ public class Profile extends AppCompatActivity {
 
             // Save image URI (for demonstration purposes)
             ProfileData.getInstance().setProfileImagePath(selectedImage.toString());
+            saveProfileImageUri(selectedImage.toString());
         }
     }
 
@@ -253,6 +246,7 @@ public class Profile extends AppCompatActivity {
                     }
                 });
     }
+
     private void displayLitterReports() {
         LinearLayout litterReportsContainer = findViewById(R.id.litterReportsContainer);
         litterReportsContainer.removeAllViews(); // Clear any existing views
@@ -260,8 +254,8 @@ public class Profile extends AppCompatActivity {
         // Fetch litter reports from Firestore based on the current user
         String userId = currentUser.getUid();
 
-        db.collection("litterReports")
-                .whereEqualTo("userId", userId) // Assuming "userId" is stored in each litter report
+        db.collection("users").document(userId)
+                .collection("litterReports")  // Updated collection path
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -281,9 +275,13 @@ public class Profile extends AppCompatActivity {
                                 TextView tvLitterLocation = litterReportView.findViewById(R.id.tvLitterLocation);
 
                                 // Get the litter report details from Firestore document
-                                String photoUrl = document.getString("photoUrl"); // Assuming the photo URL is stored in this field
+                                String photoUrl = document.getString("imageUrl");
                                 String litterType = document.getString("litterType");
-                                String litterLocation = document.getString("litterLocation");
+                                Double latitude = document.getDouble("latitude");
+                                Double longitude = document.getDouble("longitude");
+                                Integer points = document.getLong("points") != null
+                                        ? document.getLong("points").intValue()
+                                        : 0;
 
                                 // Set the photo if available
                                 if (photoUrl != null && !photoUrl.isEmpty()) {
@@ -291,8 +289,8 @@ public class Profile extends AppCompatActivity {
                                 }
 
                                 // Set the litter type and location text
-                                tvLitterType.setText(litterType);
-                                tvLitterLocation.setText(litterLocation);
+                                tvLitterType.setText("Type: " + litterType + " (Points: " + points + ")");
+                                tvLitterLocation.setText(String.format("Location: %.4f, %.4f", latitude, longitude));
 
                                 // Add the view to the container
                                 litterReportsContainer.addView(litterReportView);
@@ -303,4 +301,6 @@ public class Profile extends AppCompatActivity {
                         Toast.makeText(this, "Failed to load litter reports", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }}
+    }
+
+}
