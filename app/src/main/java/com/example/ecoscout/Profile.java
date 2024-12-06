@@ -105,9 +105,18 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        displayJoinedEvents();
-        // Show Litter Reports
-        displayLitterReports();
+        LinearLayout eventsContainer = findViewById(R.id.eventsContainer);
+        eventsContainer.setOnClickListener(v -> {
+            Intent intent = new Intent(Profile.this, EventsActivity.class);
+            startActivity(intent);
+        });
+
+        // Litter Reports Container Click Listener
+        LinearLayout litterReportsContainer = findViewById(R.id.litterReportsContainer);
+        litterReportsContainer.setOnClickListener(v -> {
+            Intent intent = new Intent(Profile.this, LitterReportsActivity.class);
+            startActivity(intent);
+        });
     }
 
     // Save photo URI to SharedPreferences
@@ -204,103 +213,4 @@ public class Profile extends AppCompatActivity {
             saveProfileImageUri(selectedImage.toString());
         }
     }
-
-    private void displayJoinedEvents() {
-        LinearLayout eventsContainer = findViewById(R.id.eventsContainer);
-        eventsContainer.removeAllViews(); // Clear any existing views
-
-        // Fetch events from Firestore (replace with your actual user ID)
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        db.collection("userEvents")
-                .whereEqualTo("userId", userId)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().isEmpty()) {
-                            // No events joined
-                            TextView noEventsText = new TextView(this);
-                            noEventsText.setText("No events attended yet");
-                            noEventsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            eventsContainer.addView(noEventsText);
-                        } else {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Create a view for each event
-                                View eventView = getLayoutInflater().inflate(R.layout.item_joined_event, eventsContainer, false);
-
-                                TextView tvEventName = eventView.findViewById(R.id.tvEventName);
-                                TextView tvEventDate = eventView.findViewById(R.id.tvEventDate);
-                                TextView tvEventLocation = eventView.findViewById(R.id.tvEventLocation);
-
-                                // Set event details from Firestore document
-                                tvEventName.setText(document.getString("eventName"));
-                                tvEventDate.setText(document.getString("eventDate"));
-                                tvEventLocation.setText(document.getString("eventLocation"));
-
-                                eventsContainer.addView(eventView);
-                            }
-                        }
-                    } else {
-                        // Handle error
-                        Toast.makeText(this, "Failed to load events", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void displayLitterReports() {
-        LinearLayout litterReportsContainer = findViewById(R.id.litterReportsContainer);
-        litterReportsContainer.removeAllViews(); // Clear any existing views
-
-        // Fetch litter reports from Firestore based on the current user
-        String userId = currentUser.getUid();
-
-        db.collection("users").document(userId)
-                .collection("litterReports")  // Updated collection path
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().isEmpty()) {
-                            // No litter reports yet
-                            TextView noReportsText = new TextView(this);
-                            noReportsText.setText("No litter reports yet");
-                            noReportsText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            litterReportsContainer.addView(noReportsText);
-                        } else {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Inflate the layout for each litter report
-                                View litterReportView = getLayoutInflater().inflate(R.layout.item_litter_report, litterReportsContainer, false);
-
-                                ImageView ivLitterPhoto = litterReportView.findViewById(R.id.ivLitterPhoto);
-                                TextView tvLitterType = litterReportView.findViewById(R.id.tvLitterType);
-                                TextView tvLitterLocation = litterReportView.findViewById(R.id.tvLitterLocation);
-
-                                // Get the litter report details from Firestore document
-                                String photoUrl = document.getString("imageUrl");
-                                String litterType = document.getString("litterType");
-                                Double latitude = document.getDouble("latitude");
-                                Double longitude = document.getDouble("longitude");
-                                Integer points = document.getLong("points") != null
-                                        ? document.getLong("points").intValue()
-                                        : 0;
-
-                                // Set the photo if available
-                                if (photoUrl != null && !photoUrl.isEmpty()) {
-                                    Glide.with(this).load(photoUrl).into(ivLitterPhoto);
-                                }
-
-                                // Set the litter type and location text
-                                tvLitterType.setText("Type: " + litterType + " (Points: " + points + ")");
-                                tvLitterLocation.setText(String.format("Location: %.4f, %.4f", latitude, longitude));
-
-                                // Add the view to the container
-                                litterReportsContainer.addView(litterReportView);
-                            }
-                        }
-                    } else {
-                        // Handle error
-                        Toast.makeText(this, "Failed to load litter reports", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
 }

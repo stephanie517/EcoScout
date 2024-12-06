@@ -53,6 +53,12 @@
         <activity
             android:name=".LitterReporting"
             android:exported="true" />
+        <activity
+            android:name=".LitterReportsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".EventsActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     tools:context=".Profile">
 
@@ -196,38 +196,83 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Events Container -->
-            <TextView
+            <!-- Navigation Cards -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Events Joined"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/primary_green"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                android:onClick="openEventsPage">
 
-            <LinearLayout
-                android:id="@+id/eventsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="16dp"/>
+                <LinearLayout
+                    android:id="@+id/eventsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp">
 
-            <!-- Litter Reports Container -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Recent Litter Reports"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/primary_green"
-                android:layout_marginBottom="8dp"/>
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/event"
+                        android:layout_marginEnd="16dp"
+                        app:tint="@color/primary_green"/>
 
-            <LinearLayout
-                android:id="@+id/litterReportsContainer"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Events Joined"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary_green"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/baseline_chevron_right_24"
+                        app:tint="@color/primary_green"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                app:cardElevation="2dp"
+                app:cardCornerRadius="12dp"
+                android:onClick="openLitterReportsPage">
+
+                <LinearLayout
+                    android:id="@+id/litterReportsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/report"
+                        android:layout_marginEnd="16dp"
+                        app:tint="@color/primary_green"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Recent Litter Reports"
+                        android:textSize="16sp"
+                        android:textColor="@color/primary_green"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/baseline_chevron_right_24"
+                        app:tint="@color/primary_green"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

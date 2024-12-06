@@ -90,9 +90,9 @@ public class SignupActivity extends AppCompatActivity {
                     userMap.put("address", address);
                     userMap.put("phone", phone);
                     userMap.put("email", email);
-                    userMap.put("totalPoints", 0); // Initialize total points
-                    userMap.put("litterReportCount", 0); // Initialize litter report count
-                    userMap.put("eventsJoined", 0); // Initialize events joined
+                    userMap.put("totalPoints", 0);
+                    userMap.put("litterReportCount", 0);
+                    userMap.put("eventsJoined", 0);
 
                     db.collection("users").document(userId).set(userMap)
                             .addOnCompleteListener(saveTask -> {
