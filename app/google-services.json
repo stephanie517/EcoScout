@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "150271275690-b5cbl9m1k8j8ftaute2f57eq0m8tacet.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecoscout",
+            "certificate_hash": "6b6f646e086652199be6a63d508d9f74920a6712"
+          }
+        },
+        {
           "client_id": "150271275690-6rbvnilj4hgm54i36um8qnatsvm2tvab.apps.googleusercontent.com",
           "client_type": 3
         }
