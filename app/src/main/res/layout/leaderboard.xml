@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        app:elevation="0dp" >
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
@@ -64,12 +64,21 @@
                             app:civ_border_color="#81C784"/>
 
                         <TextView
+                            android:id="@+id/tvSecondPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="2nd Place"
                             android:textColor="#2E7D32"
                             android:layout_marginTop="8dp"
                             android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/tvSecondPlacePoints"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 points"
+                            android:textColor="#2E7D32"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
 
                     <!-- Rank 1 (Middle) -->
@@ -88,12 +97,21 @@
                             app:civ_border_color="#4CAF50"/>
 
                         <TextView
+                            android:id="@+id/tvFirstPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1st Place"
                             android:textColor="#2E7D32"
                             android:layout_marginTop="8dp"
                             android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/tvFirstPlacePoints"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 points"
+                            android:textColor="#2E7D32"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
 
                     <!-- Rank 3 (Right) -->
@@ -112,12 +130,21 @@
                             app:civ_border_color="#A5D6A7"/>
 
                         <TextView
+                            android:id="@+id/tvThirdPlaceName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="3rd Place"
                             android:textColor="#2E7D32"
                             android:layout_marginTop="8dp"
                             android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/tvThirdPlacePoints"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0 points"
+                            android:textColor="#2E7D32"
+                            android:layout_marginTop="4dp"/>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

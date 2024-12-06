@@ -54,12 +54,18 @@ public class Leaderboard extends AppCompatActivity {
     private void fetchLeaderboardData() {
         db.collection("users")
                 .orderBy("totalPoints", Query.Direction.DESCENDING)
-                .limit(50)  // Limit to top 50 users
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         leaderboardItems.clear();
+
+                        // Separate variables for top 3 users
+                        LeaderboardItem firstPlace = null;
+                        LeaderboardItem secondPlace = null;
+                        LeaderboardItem thirdPlace = null;
+
                         int userRank = -1;
+                        int index = 0;
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String name = document.getString("fullName");
@@ -67,15 +73,40 @@ public class Leaderboard extends AppCompatActivity {
                             int points = totalPoints != null ? totalPoints.intValue() : 0;
 
                             LeaderboardItem item = new LeaderboardItem(name, points, R.drawable.profile);
-                            leaderboardItems.add(item);
+
+                            // Assign top 3 places
+                            if (index == 0) {
+                                firstPlace = item;
+                            } else if (index == 1) {
+                                secondPlace = item;
+                            } else if (index == 2) {
+                                thirdPlace = item;
+                            } else {
+                                leaderboardItems.add(item);
+                            }
 
                             // Find current user's rank
                             if (currentUser != null && document.getId().equals(currentUser.getUid())) {
-                                userRank = leaderboardItems.size();
+                                userRank = index + 1;
                             }
+                            index++;
                         }
 
-                        // Update UI
+                        // Update top 3 UI
+                        if (firstPlace != null) {
+                            ((TextView) findViewById(R.id.tvFirstPlaceName)).setText(firstPlace.getName());
+                            ((TextView) findViewById(R.id.tvFirstPlacePoints)).setText(firstPlace.getPoints() + " points");
+                        }
+                        if (secondPlace != null) {
+                            ((TextView) findViewById(R.id.tvSecondPlaceName)).setText(secondPlace.getName());
+                            ((TextView) findViewById(R.id.tvSecondPlacePoints)).setText(secondPlace.getPoints() + " points");
+                        }
+                        if (thirdPlace != null) {
+                            ((TextView) findViewById(R.id.tvThirdPlaceName)).setText(thirdPlace.getName());
+                            ((TextView) findViewById(R.id.tvThirdPlacePoints)).setText(thirdPlace.getPoints() + " points");
+                        }
+
+                        // Update RecyclerView for other users
                         adapter.notifyDataSetChanged();
 
                         // Display user's rank and points
@@ -93,4 +124,3 @@ public class Leaderboard extends AppCompatActivity {
                 });
     }
 }
-
