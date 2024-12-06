@@ -66,10 +66,12 @@ public class Leaderboard extends AppCompatActivity {
 
                         int userRank = -1;
                         int index = 0;
+                        int currentUserPoints = 0; // To store the current user's total points
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String name = document.getString("fullName");
                             Long totalPoints = document.getLong("totalPoints");
+                            if (name == null) name = "Anonymous"; // Default name
                             int points = totalPoints != null ? totalPoints.intValue() : 0;
 
                             LeaderboardItem item = new LeaderboardItem(name, points, R.drawable.profile);
@@ -85,9 +87,10 @@ public class Leaderboard extends AppCompatActivity {
                                 leaderboardItems.add(item);
                             }
 
-                            // Find current user's rank
+                            // Find current user's rank and points
                             if (currentUser != null && document.getId().equals(currentUser.getUid())) {
                                 userRank = index + 1;
+                                currentUserPoints = points; // Get the current user's total points
                             }
                             index++;
                         }
@@ -112,10 +115,10 @@ public class Leaderboard extends AppCompatActivity {
                         // Display user's rank and points
                         if (userRank != -1) {
                             tvUserRank.setText("Your Rank: " + userRank);
-                            tvUserPoints.setText("Your Points: " + leaderboardItems.get(userRank - 1).getPoints());
+                            tvUserPoints.setText("Your Points: " + currentUserPoints);
                         } else {
-                            tvUserRank.setText("Rank: Not Ranked");
-                            tvUserPoints.setText("Points: 0");
+                            tvUserRank.setText("Your Rank: Not Ranked");
+                            tvUserPoints.setText("Your Points: 0");
                         }
                     } else {
                         Log.e("Leaderboard", "Error fetching leaderboard data", task.getException());
