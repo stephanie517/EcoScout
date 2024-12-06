@@ -16,5 +16,6 @@
         android:text="Save Location"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/primary_green"/>
 </RelativeLayout>

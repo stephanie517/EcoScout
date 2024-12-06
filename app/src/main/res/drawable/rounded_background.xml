@@ -1,6 +1,6 @@
 <!-- res/drawable/rounded_background.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#82A8A5"/>
+    <solid android:color="@color/primary_green"/>
     <corners android:radius="32dp"/>  <!-- Increased radius for smoother edges -->
     <padding
         android:left="8dp"

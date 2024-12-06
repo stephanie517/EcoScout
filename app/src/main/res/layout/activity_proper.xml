@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/proper"
+    android:backgroundTint="@color/light_green"
     android:padding="16dp">
 
     <LinearLayout
@@ -22,14 +22,14 @@
             android:layout_marginBottom="16dp"
             android:layout_gravity="start"
             android:padding="12dp"
-            android:backgroundTint="#E0E0E0"
             android:text="Back to Dashboard"
             android:textColor="#3C3C3C"
             android:textSize="14sp"
             android:drawableStart="@drawable/ic_back"
             android:drawablePadding="8dp"
             android:elevation="5dp"
-            app:cornerRadius="12dp" />
+            app:cornerRadius="12dp"
+            android:backgroundTint="#E6F3E6"/>
 
         <TextView
             android:id="@+id/titleText"
